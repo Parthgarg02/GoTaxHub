@@ -1970,3 +1970,98 @@ main {
         grid-template-columns: 1fr;
     }
 }
+
+/* Due Dates Categories Styling */
+.due-dates-category {
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-16);
+    background: var(--color-surface);
+}
+
+.due-dates-category h4 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.due-dates-category .due-date-item {
+    margin-bottom: var(--space-8);
+    padding: var(--space-8);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-background);
+}
+
+.due-dates-category .due-date {
+    font-weight: 600;
+    color: var(--color-error);
+}
+
+.exemption-details, .exemption-calculation {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-16);
+    margin-top: var(--space-16);
+}
+
+.exemption-details h5, .exemption-calculation h5 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.important-notes {
+    background: var(--color-warning-light);
+    border: 1px solid var(--color-warning);
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-16);
+    margin-top: var(--space-16);
+}
+
+.important-notes h5 {
+    color: var(--color-warning-dark);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.important-notes ul {
+    color: var(--color-warning-dark);
+    margin-left: var(--space-16);
+}
+
+.tds-calculation, .tds-notes, .form-tips {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-16);
+    margin-top: var(--space-16);
+}
+
+.tds-notes h5, .form-tips h5 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.tool-result .highlight {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+}
+
+.tool-result .note {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    font-size: var(--font-size-sm);
+}

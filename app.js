@@ -568,10 +568,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Tax Calculator Functions
+// Tax Calculator Functions - Based on Tax2win.in formulas
 function calculateITR() {
     const income = parseFloat(document.getElementById('itr-income').value);
     const year = document.getElementById('itr-year').value;
+    const regime = document.getElementById('tax-regime').value || 'new';
     const resultDiv = document.getElementById('itr-result');
     
     if (!income || income <= 0) {
@@ -580,29 +581,63 @@ function calculateITR() {
     }
     
     let tax = 0;
-    let regime = 'New Tax Regime (FY ' + year + ')';
+    let regimeName = '';
+    let standardDeduction = 0;
+    let rebate = 0;
     
-    // New tax regime slabs for FY 2024-25
-    if (year === '2024-25') {
-        if (income <= 300000) tax = 0;
-        else if (income <= 700000) tax = (income - 300000) * 0.05;
-        else if (income <= 1000000) tax = 20000 + (income - 700000) * 0.10;
-        else if (income <= 1200000) tax = 50000 + (income - 1000000) * 0.15;
-        else if (income <= 1500000) tax = 80000 + (income - 1200000) * 0.20;
-        else tax = 140000 + (income - 1500000) * 0.30;
+    if (regime === 'new') {
+        regimeName = 'New Tax Regime (Default for FY 2024-25)';
+        standardDeduction = 75000; // Budget 2024 increased to ₹75,000
+        
+        const taxableIncome = Math.max(0, income - standardDeduction);
+        
+        // New tax regime slabs for FY 2024-25
+        if (taxableIncome <= 300000) tax = 0;
+        else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
+        else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
+        else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
+        else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
+        else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+        
+        // Rebate under Section 87A - 100% rebate for income up to ₹7 lakhs
+        if (taxableIncome <= 700000) {
+            rebate = tax;
+            tax = 0;
+        }
+    } else {
+        regimeName = 'Old Tax Regime (FY 2024-25)';
+        standardDeduction = 50000; // Old regime standard deduction
+        
+        const taxableIncome = Math.max(0, income - standardDeduction);
+        
+        // Old tax regime slabs for FY 2024-25
+        if (taxableIncome <= 250000) tax = 0;
+        else if (taxableIncome <= 500000) tax = (taxableIncome - 250000) * 0.05;
+        else if (taxableIncome <= 1000000) tax = 12500 + (taxableIncome - 500000) * 0.20;
+        else tax = 112500 + (taxableIncome - 1000000) * 0.30;
+        
+        // Rebate under Section 87A - 100% rebate for income up to ₹5 lakhs
+        if (taxableIncome <= 500000) {
+            rebate = tax;
+            tax = 0;
+        }
     }
     
-    // Add 4% cess on tax amount
+    // Add 4% Health and Education Cess
     const cess = tax * 0.04;
     const totalTax = tax + cess;
     
     resultDiv.innerHTML = `
-        <h4>Tax Calculation Result</h4>
-        <p><strong>Annual Income:</strong> ₹${income.toLocaleString()}</p>
-        <p><strong>Tax Regime:</strong> ${regime}</p>
-        <p><strong>Income Tax:</strong> ₹${tax.toLocaleString()}</p>
+        <h4>Income Tax Calculation Result</h4>
+        <p><strong>Gross Annual Income:</strong> ₹${income.toLocaleString()}</p>
+        <p><strong>Standard Deduction:</strong> ₹${standardDeduction.toLocaleString()}</p>
+        <p><strong>Taxable Income:</strong> ₹${Math.max(0, income - standardDeduction).toLocaleString()}</p>
+        <p><strong>Tax Regime:</strong> ${regimeName}</p>
+        <p><strong>Income Tax Before Rebate:</strong> ₹${(tax + rebate).toLocaleString()}</p>
+        ${rebate > 0 ? `<p><strong>Rebate u/s 87A:</strong> ₹${rebate.toLocaleString()}</p>` : ''}
+        <p><strong>Income Tax After Rebate:</strong> ₹${tax.toLocaleString()}</p>
         <p><strong>Health & Education Cess (4%):</strong> ₹${cess.toLocaleString()}</p>
-        <p><strong>Total Tax Liability:</strong> ₹${totalTax.toLocaleString()}</p>
+        <p class="highlight"><strong>Total Tax Liability:</strong> ₹${totalTax.toLocaleString()}</p>
     `;
 }
 
@@ -617,27 +652,48 @@ function checkITREligibility() {
     
     let form = '';
     let description = '';
+    let applicability = '';
     
     switch(incomeType) {
         case 'salary':
             form = 'ITR-1 (Sahaj)';
-            description = 'For individuals with salary income, one house property, and other sources up to ₹50 lakhs';
+            description = 'For individuals with salary income, one house property, and other sources';
+            applicability = 'Total income up to ₹50 lakhs, no business/capital gains income';
             break;
         case 'salary-property':
             form = 'ITR-2';
             description = 'For individuals with salary income and multiple house properties or capital gains';
+            applicability = 'No business or professional income, can have capital gains';
             break;
         case 'business':
             form = 'ITR-3';
             description = 'For individuals/HUFs with business or professional income';
+            applicability = 'Income from business, profession, or presumptive income schemes';
             break;
         case 'capital-gains':
             form = 'ITR-2';
             description = 'For individuals with capital gains from investments or property';
+            applicability = 'Capital gains from sale of property, shares, mutual funds etc.';
             break;
         case 'foreign':
             form = 'ITR-2 or ITR-3';
             description = 'For individuals with foreign income or assets';
+            applicability = 'Foreign income, foreign assets, or resident but not ordinarily resident';
+            break;
+        case 'firm':
+            form = 'ITR-5';
+            description = 'For firms, LLPs, and Association of Persons (AOP)';
+            applicability = 'Partnership firms, Limited Liability Partnerships, AOP, BOI';
+            break;
+        case 'company':
+            form = 'ITR-6';
+            description = 'For companies other than companies claiming exemption under section 11';
+            applicability = 'All companies except those claiming exemption u/s 11';
+            break;
+        case 'trust':
+            form = 'ITR-7';
+            description = 'For trusts, political parties, institutions, and exempt entities';
+            applicability = 'Religious/charitable trusts, political parties, research institutions';
             break;
     }
     
@@ -645,12 +701,23 @@ function checkITREligibility() {
         <h4>ITR Form Required</h4>
         <p><strong>Recommended Form:</strong> ${form}</p>
         <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Applicability:</strong> ${applicability}</p>
+        <div class="form-tips">
+            <h5>Filing Tips:</h5>
+            <ul>
+                <li>File before the due date to avoid penalties</li>
+                <li>Keep all supporting documents ready</li>
+                <li>Use digital signature for ITR-3 and above</li>
+                <li>Consider professional help for complex returns</li>
+            </ul>
+        </div>
     `;
 }
 
 function calculateGratuity() {
     const salary = parseFloat(document.getElementById('gratuity-salary').value);
     const years = parseFloat(document.getElementById('gratuity-years').value);
+    const employeeType = document.getElementById('employee-type').value || 'private';
     const resultDiv = document.getElementById('gratuity-result');
     
     if (!salary || !years || salary <= 0 || years <= 0) {
@@ -663,25 +730,53 @@ function calculateGratuity() {
         return;
     }
     
-    // Gratuity = (Last drawn salary × 15 × Years of service) / 26
-    const gratuity = (salary * 15 * years) / 26;
-    const exemptLimit = 2000000; // ₹20 lakhs exemption limit
-    const exemptAmount = Math.min(gratuity, exemptLimit);
-    const taxableAmount = Math.max(0, gratuity - exemptLimit);
+    // Gratuity calculation: (Basic Salary + DA) × 15 × Years of service / 26
+    // For government employees: 1/2 month's salary for each completed year
+    let gratuity = 0;
+    let exemptLimit = 0;
+    let calculationMethod = '';
+    
+    if (employeeType === 'government') {
+        // Government employees - different calculation
+        gratuity = (salary * years) / 2; // 1/2 month's salary for each year
+        exemptLimit = 2500000; // ₹25 lakhs for government employees (effective Jan 1, 2024)
+        calculationMethod = 'Government Formula: (Basic Salary × Years of Service) ÷ 2';
+    } else {
+        // Private sector employees
+        const roundedYears = Math.round(years); // Round to nearest year for gratuity calculation
+        gratuity = (salary * 15 * roundedYears) / 26;
+        exemptLimit = 2000000; // ₹20 lakhs exemption limit for private sector
+        calculationMethod = 'Private Formula: (Basic Salary × 15 × Years) ÷ 26';
+    }
+    
+    // Calculate exemption (minimum of actual gratuity, exemption limit, and 10 months average salary × years × 1/2)
+    const tenMonthsFormula = (salary * 10 * years) / 2;
+    const actualExemption = Math.min(gratuity, exemptLimit, tenMonthsFormula);
+    const taxableAmount = Math.max(0, gratuity - actualExemption);
     
     resultDiv.innerHTML = `
-        <h4>Gratuity Calculation Result</h4>
-        <p><strong>Last Drawn Salary:</strong> ₹${salary.toLocaleString()}</p>
-        <p><strong>Years of Service:</strong> ${years}</p>
-        <p><strong>Total Gratuity:</strong> ₹${gratuity.toLocaleString()}</p>
-        <p><strong>Exempt Amount:</strong> ₹${exemptAmount.toLocaleString()}</p>
-        <p><strong>Taxable Amount:</strong> ₹${taxableAmount.toLocaleString()}</p>
+        <h4>Gratuity Calculation Result (FY 2024-25)</h4>
+        <p><strong>Employee Type:</strong> ${employeeType === 'government' ? 'Government Employee' : 'Private Sector Employee'}</p>
+        <p><strong>Basic Salary (Last Drawn):</strong> ₹${salary.toLocaleString()}</p>
+        <p><strong>Years of Service:</strong> ${years} ${employeeType === 'private' ? `(Rounded to ${Math.round(years)})` : ''}</p>
+        <p><strong>Calculation Method:</strong> ${calculationMethod}</p>
+        <p><strong>Total Gratuity Amount:</strong> ₹${Math.round(gratuity).toLocaleString()}</p>
+        <div class="exemption-details">
+            <h5>Tax Exemption Calculation:</h5>
+            <p>• Actual Gratuity: ₹${Math.round(gratuity).toLocaleString()}</p>
+            <p>• Maximum Exemption Limit: ₹${exemptLimit.toLocaleString()}</p>
+            <p>• 10 Months Salary Formula: ₹${Math.round(tenMonthsFormula).toLocaleString()}</p>
+            <p><strong>Exempt Amount (Minimum of above):</strong> ₹${Math.round(actualExemption).toLocaleString()}</p>
+            <p class="highlight"><strong>Taxable Amount:</strong> ₹${Math.round(taxableAmount).toLocaleString()}</p>
+        </div>
+        ${employeeType === 'government' ? '<p class="note"><strong>Note:</strong> Government employees get full exemption on gratuity upon retirement.</p>' : ''}
     `;
 }
 
 function calculateTDS() {
     const income = parseFloat(document.getElementById('tds-income').value);
     const type = document.getElementById('tds-type').value;
+    const isMonthly = document.getElementById('tds-frequency').value === 'monthly';
     const resultDiv = document.getElementById('tds-result');
     
     if (!income || income <= 0 || !type) {
@@ -689,47 +784,114 @@ function calculateTDS() {
         return;
     }
     
+    const annualIncome = isMonthly ? income * 12 : income;
     let tds = 0;
     let threshold = 0;
     let rate = 0;
+    let section = '';
+    let applicableIncome = 0;
     
     switch(type) {
         case 'salary':
-            // TDS on salary is calculated based on tax slabs
-            tds = calculateTaxOnIncome(income);
-            threshold = 300000;
+            // TDS on salary calculated using tax slabs
+            const taxLiability = calculateTaxOnIncome(annualIncome);
+            tds = taxLiability;
+            threshold = 0; // No threshold for salary TDS
             rate = 'As per tax slabs';
+            section = 'Section 192';
+            applicableIncome = annualIncome;
             break;
+            
         case 'interest':
-            threshold = 40000; // For senior citizens: ₹50,000
+            threshold = 40000; // ₹50,000 for senior citizens (60+)
             rate = 10;
-            if (income > threshold) {
-                tds = (income - threshold) * 0.10;
+            section = 'Section 194A';
+            if (annualIncome > threshold) {
+                applicableIncome = annualIncome;
+                tds = annualIncome * 0.10;
             }
             break;
+            
         case 'professional':
-            threshold = 30000;
+            threshold = 30000; // Annual threshold
             rate = 10;
-            if (income > threshold) {
-                tds = income * 0.10;
+            section = 'Section 194J';
+            if (annualIncome > threshold) {
+                applicableIncome = annualIncome;
+                tds = annualIncome * 0.10;
             }
             break;
+            
         case 'rent':
-            threshold = 240000;
+            threshold = 240000; // Annual threshold for individuals/HUFs
+            rate = 2; // Reduced from 5% to 2% effective October 1, 2024
+            section = 'Section 194IB';
+            if (annualIncome > threshold) {
+                applicableIncome = annualIncome;
+                tds = annualIncome * 0.02;
+            }
+            break;
+            
+        case 'commission':
+            threshold = 15000; // Annual threshold
+            rate = 2; // Reduced from 5% to 2% effective October 1, 2024
+            section = 'Section 194H';
+            if (annualIncome > threshold) {
+                applicableIncome = annualIncome;
+                tds = annualIncome * 0.02;
+            }
+            break;
+            
+        case 'contractor':
+            threshold = 30000; // For individuals, ₹1 lakh for companies
+            rate = 1; // 1% for individuals, 2% for companies
+            section = 'Section 194C';
+            if (annualIncome > threshold) {
+                applicableIncome = annualIncome;
+                tds = annualIncome * 0.01;
+            }
+            break;
+            
+        case 'dividend':
+            threshold = 5000; // Annual threshold
             rate = 10;
-            if (income > threshold) {
-                tds = income * 0.10;
+            section = 'Section 194';
+            if (annualIncome > threshold) {
+                applicableIncome = annualIncome;
+                tds = annualIncome * 0.10;
             }
             break;
     }
     
+    const monthlyTDS = tds / 12;
+    
     resultDiv.innerHTML = `
-        <h4>TDS Calculation Result</h4>
+        <h4>TDS Calculation Result (FY 2024-25)</h4>
         <p><strong>Income Type:</strong> ${type.charAt(0).toUpperCase() + type.slice(1)}</p>
-        <p><strong>Annual Income:</strong> ₹${income.toLocaleString()}</p>
+        <p><strong>Applicable Section:</strong> ${section}</p>
+        <p><strong>${isMonthly ? 'Monthly' : 'Annual'} Income:</strong> ₹${income.toLocaleString()}</p>
+        <p><strong>Annual Income:</strong> ₹${annualIncome.toLocaleString()}</p>
         <p><strong>TDS Threshold:</strong> ₹${threshold.toLocaleString()}</p>
-        <p><strong>TDS Rate:</strong> ${rate}${typeof rate === 'number' ? '%' : ''}</p>
-        <p><strong>TDS Amount:</strong> ₹${tds.toLocaleString()}</p>
+        <p><strong>TDS Rate:</strong> ${typeof rate === 'number' ? rate + '%' : rate}</p>
+        
+        ${threshold > 0 && annualIncome <= threshold ? 
+            '<p class="highlight"><strong>No TDS:</strong> Income below threshold limit</p>' : 
+            `<div class="tds-calculation">
+                <p><strong>TDS Applicable On:</strong> ₹${applicableIncome.toLocaleString()}</p>
+                <p><strong>Annual TDS Amount:</strong> ₹${Math.round(tds).toLocaleString()}</p>
+                <p><strong>Monthly TDS Amount:</strong> ₹${Math.round(monthlyTDS).toLocaleString()}</p>
+            </div>`
+        }
+        
+        <div class="tds-notes">
+            <h5>Important Notes:</h5>
+            <ul>
+                <li>Higher rates apply if PAN is not provided (Section 206AA)</li>
+                <li>TDS rates updated as per Finance Act 2024</li>
+                <li>Senior citizens (60+) have higher threshold for interest income</li>
+                ${type === 'rent' || type === 'commission' ? '<li>Rate reduced effective October 1, 2024</li>' : ''}
+            </ul>
+        </div>
     `;
 }
 
@@ -749,6 +911,7 @@ function calculateLeaveEncashment() {
     const salary = parseFloat(document.getElementById('leave-salary').value);
     const leaveDays = parseFloat(document.getElementById('leave-days').value);
     const years = parseFloat(document.getElementById('leave-years').value);
+    const employeeType = document.getElementById('leave-employee-type').value || 'private';
     const resultDiv = document.getElementById('leave-result');
     
     if (!salary || !leaveDays || !years || salary <= 0 || leaveDays <= 0 || years <= 0) {
@@ -756,23 +919,76 @@ function calculateLeaveEncashment() {
         return;
     }
     
+    // Basic salary + DA for calculation
     const dailySalary = salary / 30;
     const totalEncashment = dailySalary * leaveDays;
     
-    // Exemption calculation: Lesser of 3 lakhs or 10 months salary or actual encashment
-    const tenMonthsSalary = salary * 10;
-    const exemptLimit = 300000;
-    const exemptAmount = Math.min(exemptLimit, tenMonthsSalary, totalEncashment);
+    // Calculate exemption based on employee type
+    let exemptAmount = 0;
+    let exemptLimit = 0;
+    let calculationNote = '';
+    
+    if (employeeType === 'government') {
+        // Government employees: Full exemption
+        exemptAmount = totalEncashment;
+        exemptLimit = totalEncashment;
+        calculationNote = 'Government employees get full exemption on leave encashment';
+    } else {
+        // Non-government employees: Budget 2023 increased exemption to ₹25 lakhs
+        exemptLimit = 2500000; // ₹25 lakhs (8-fold increase from ₹3 lakhs)
+        
+        // Calculate exemption: Minimum of
+        // 1. Actual leave encashment received
+        // 2. Leave for 30 days per year of service × daily salary
+        // 3. Average salary for last 10 months
+        // 4. Maximum exemption limit (₹25 lakhs)
+        
+        const thirtyDaysPerYear = (salary / 30) * 30 * years; // 30 days per year of service
+        const tenMonthsAverage = salary * 10; // Last 10 months average salary
+        
+        exemptAmount = Math.min(
+            totalEncashment,
+            thirtyDaysPerYear,
+            tenMonthsAverage,
+            exemptLimit
+        );
+        
+        calculationNote = 'Exemption is minimum of: Actual amount, 30 days per year × daily salary, 10 months average salary, and ₹25 lakhs';
+    }
+    
     const taxableAmount = Math.max(0, totalEncashment - exemptAmount);
     
     resultDiv.innerHTML = `
-        <h4>Leave Encashment Calculation</h4>
-        <p><strong>Last Drawn Salary:</strong> ₹${salary.toLocaleString()}</p>
+        <h4>Leave Encashment Tax Calculation (FY 2024-25)</h4>
+        <p><strong>Employee Type:</strong> ${employeeType === 'government' ? 'Government Employee' : 'Non-Government Employee'}</p>
+        <p><strong>Basic Salary + DA:</strong> ₹${salary.toLocaleString()}</p>
+        <p><strong>Years of Service:</strong> ${years}</p>
         <p><strong>Leave Days Encashed:</strong> ${leaveDays}</p>
-        <p><strong>Daily Salary:</strong> ₹${dailySalary.toLocaleString()}</p>
-        <p><strong>Total Encashment:</strong> ₹${totalEncashment.toLocaleString()}</p>
-        <p><strong>Exempt Amount:</strong> ₹${exemptAmount.toLocaleString()}</p>
-        <p><strong>Taxable Amount:</strong> ₹${taxableAmount.toLocaleString()}</p>
+        <p><strong>Daily Salary:</strong> ₹${Math.round(dailySalary).toLocaleString()}</p>
+        <p><strong>Total Leave Encashment:</strong> ₹${Math.round(totalEncashment).toLocaleString()}</p>
+        
+        <div class="exemption-calculation">
+            <h5>Tax Exemption Calculation (Section 10(10AA)):</h5>
+            ${employeeType === 'private' ? `
+                <p>• Actual Encashment: ₹${Math.round(totalEncashment).toLocaleString()}</p>
+                <p>• 30 Days/Year Formula: ₹${Math.round((salary / 30) * 30 * years).toLocaleString()}</p>
+                <p>• 10 Months Salary: ₹${Math.round(salary * 10).toLocaleString()}</p>
+                <p>• Maximum Limit: ₹${exemptLimit.toLocaleString()}</p>
+            ` : ''}
+            <p><strong>Exempt Amount:</strong> ₹${Math.round(exemptAmount).toLocaleString()}</p>
+            <p class="highlight"><strong>Taxable Amount:</strong> ₹${Math.round(taxableAmount).toLocaleString()}</p>
+        </div>
+        
+        <div class="important-notes">
+            <h5>Important Points:</h5>
+            <ul>
+                <li>${calculationNote}</li>
+                <li>Exemption limit increased from ₹3 lakhs to ₹25 lakhs in Budget 2023</li>
+                <li>This exemption is available under both old and new tax regimes</li>
+                <li>The ₹25 lakh limit is lifetime aggregate across all employers</li>
+                ${employeeType === 'government' ? '<li>Government employees (Central & State) get full exemption</li>' : ''}
+            </ul>
+        </div>
     `;
 }
 
