@@ -242,14 +242,26 @@ function initContactForm() {
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
             
-            // Simulate API call
+            // Create mailto link to send email
+            const subject = encodeURIComponent(`Contact Form Submission from ${name}`);
+            const body = encodeURIComponent(
+                `Name: ${name}\n` +
+                `Email: ${email}\n` +
+                `Phone: ${phone}\n` +
+                `Service: ${service || 'Not specified'}\n` +
+                `Message: ${message || 'No message provided'}`
+            );
+            
+            const mailtoLink = `mailto:info@gotaxhub.com?subject=${subject}&body=${body}`;
+            window.location.href = mailtoLink;
+            
             setTimeout(() => {
                 showNotification('Thank you for your message! Our team will contact you within 24 hours.', 'success');
                 this.reset();
                 
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
-            }, 1500);
+            }, 1000);
         });
     }
 }
@@ -555,3 +567,264 @@ document.addEventListener('DOMContentLoaded', function() {
         homePage.classList.add('active');
     }
 });
+
+// Tax Calculator Functions
+function calculateITR() {
+    const income = parseFloat(document.getElementById('itr-income').value);
+    const year = document.getElementById('itr-year').value;
+    const resultDiv = document.getElementById('itr-result');
+    
+    if (!income || income <= 0) {
+        resultDiv.innerHTML = '<p class="error">Please enter a valid annual income.</p>';
+        return;
+    }
+    
+    let tax = 0;
+    let regime = 'New Tax Regime (FY ' + year + ')';
+    
+    // New tax regime slabs for FY 2024-25
+    if (year === '2024-25') {
+        if (income <= 300000) tax = 0;
+        else if (income <= 700000) tax = (income - 300000) * 0.05;
+        else if (income <= 1000000) tax = 20000 + (income - 700000) * 0.10;
+        else if (income <= 1200000) tax = 50000 + (income - 1000000) * 0.15;
+        else if (income <= 1500000) tax = 80000 + (income - 1200000) * 0.20;
+        else tax = 140000 + (income - 1500000) * 0.30;
+    }
+    
+    // Add 4% cess on tax amount
+    const cess = tax * 0.04;
+    const totalTax = tax + cess;
+    
+    resultDiv.innerHTML = `
+        <h4>Tax Calculation Result</h4>
+        <p><strong>Annual Income:</strong> ₹${income.toLocaleString()}</p>
+        <p><strong>Tax Regime:</strong> ${regime}</p>
+        <p><strong>Income Tax:</strong> ₹${tax.toLocaleString()}</p>
+        <p><strong>Health & Education Cess (4%):</strong> ₹${cess.toLocaleString()}</p>
+        <p><strong>Total Tax Liability:</strong> ₹${totalTax.toLocaleString()}</p>
+    `;
+}
+
+function checkITREligibility() {
+    const incomeType = document.getElementById('income-type').value;
+    const resultDiv = document.getElementById('itr-eligibility-result');
+    
+    if (!incomeType) {
+        resultDiv.innerHTML = '<p class="error">Please select an income type.</p>';
+        return;
+    }
+    
+    let form = '';
+    let description = '';
+    
+    switch(incomeType) {
+        case 'salary':
+            form = 'ITR-1 (Sahaj)';
+            description = 'For individuals with salary income, one house property, and other sources up to ₹50 lakhs';
+            break;
+        case 'salary-property':
+            form = 'ITR-2';
+            description = 'For individuals with salary income and multiple house properties or capital gains';
+            break;
+        case 'business':
+            form = 'ITR-3';
+            description = 'For individuals/HUFs with business or professional income';
+            break;
+        case 'capital-gains':
+            form = 'ITR-2';
+            description = 'For individuals with capital gains from investments or property';
+            break;
+        case 'foreign':
+            form = 'ITR-2 or ITR-3';
+            description = 'For individuals with foreign income or assets';
+            break;
+    }
+    
+    resultDiv.innerHTML = `
+        <h4>ITR Form Required</h4>
+        <p><strong>Recommended Form:</strong> ${form}</p>
+        <p><strong>Description:</strong> ${description}</p>
+    `;
+}
+
+function calculateGratuity() {
+    const salary = parseFloat(document.getElementById('gratuity-salary').value);
+    const years = parseFloat(document.getElementById('gratuity-years').value);
+    const resultDiv = document.getElementById('gratuity-result');
+    
+    if (!salary || !years || salary <= 0 || years <= 0) {
+        resultDiv.innerHTML = '<p class="error">Please enter valid salary and years of service.</p>';
+        return;
+    }
+    
+    if (years < 5) {
+        resultDiv.innerHTML = '<p class="error">Gratuity is payable only after 5 years of continuous service.</p>';
+        return;
+    }
+    
+    // Gratuity = (Last drawn salary × 15 × Years of service) / 26
+    const gratuity = (salary * 15 * years) / 26;
+    const exemptLimit = 2000000; // ₹20 lakhs exemption limit
+    const exemptAmount = Math.min(gratuity, exemptLimit);
+    const taxableAmount = Math.max(0, gratuity - exemptLimit);
+    
+    resultDiv.innerHTML = `
+        <h4>Gratuity Calculation Result</h4>
+        <p><strong>Last Drawn Salary:</strong> ₹${salary.toLocaleString()}</p>
+        <p><strong>Years of Service:</strong> ${years}</p>
+        <p><strong>Total Gratuity:</strong> ₹${gratuity.toLocaleString()}</p>
+        <p><strong>Exempt Amount:</strong> ₹${exemptAmount.toLocaleString()}</p>
+        <p><strong>Taxable Amount:</strong> ₹${taxableAmount.toLocaleString()}</p>
+    `;
+}
+
+function calculateTDS() {
+    const income = parseFloat(document.getElementById('tds-income').value);
+    const type = document.getElementById('tds-type').value;
+    const resultDiv = document.getElementById('tds-result');
+    
+    if (!income || income <= 0 || !type) {
+        resultDiv.innerHTML = '<p class="error">Please enter valid income and select TDS type.</p>';
+        return;
+    }
+    
+    let tds = 0;
+    let threshold = 0;
+    let rate = 0;
+    
+    switch(type) {
+        case 'salary':
+            // TDS on salary is calculated based on tax slabs
+            tds = calculateTaxOnIncome(income);
+            threshold = 300000;
+            rate = 'As per tax slabs';
+            break;
+        case 'interest':
+            threshold = 40000; // For senior citizens: ₹50,000
+            rate = 10;
+            if (income > threshold) {
+                tds = (income - threshold) * 0.10;
+            }
+            break;
+        case 'professional':
+            threshold = 30000;
+            rate = 10;
+            if (income > threshold) {
+                tds = income * 0.10;
+            }
+            break;
+        case 'rent':
+            threshold = 240000;
+            rate = 10;
+            if (income > threshold) {
+                tds = income * 0.10;
+            }
+            break;
+    }
+    
+    resultDiv.innerHTML = `
+        <h4>TDS Calculation Result</h4>
+        <p><strong>Income Type:</strong> ${type.charAt(0).toUpperCase() + type.slice(1)}</p>
+        <p><strong>Annual Income:</strong> ₹${income.toLocaleString()}</p>
+        <p><strong>TDS Threshold:</strong> ₹${threshold.toLocaleString()}</p>
+        <p><strong>TDS Rate:</strong> ${rate}${typeof rate === 'number' ? '%' : ''}</p>
+        <p><strong>TDS Amount:</strong> ₹${tds.toLocaleString()}</p>
+    `;
+}
+
+function calculateTaxOnIncome(income) {
+    let tax = 0;
+    if (income <= 300000) tax = 0;
+    else if (income <= 700000) tax = (income - 300000) * 0.05;
+    else if (income <= 1000000) tax = 20000 + (income - 700000) * 0.10;
+    else if (income <= 1200000) tax = 50000 + (income - 1000000) * 0.15;
+    else if (income <= 1500000) tax = 80000 + (income - 1200000) * 0.20;
+    else tax = 140000 + (income - 1500000) * 0.30;
+    
+    return tax * 1.04; // Add 4% cess
+}
+
+function calculateLeaveEncashment() {
+    const salary = parseFloat(document.getElementById('leave-salary').value);
+    const leaveDays = parseFloat(document.getElementById('leave-days').value);
+    const years = parseFloat(document.getElementById('leave-years').value);
+    const resultDiv = document.getElementById('leave-result');
+    
+    if (!salary || !leaveDays || !years || salary <= 0 || leaveDays <= 0 || years <= 0) {
+        resultDiv.innerHTML = '<p class="error">Please enter valid salary, leave days, and years of service.</p>';
+        return;
+    }
+    
+    const dailySalary = salary / 30;
+    const totalEncashment = dailySalary * leaveDays;
+    
+    // Exemption calculation: Lesser of 3 lakhs or 10 months salary or actual encashment
+    const tenMonthsSalary = salary * 10;
+    const exemptLimit = 300000;
+    const exemptAmount = Math.min(exemptLimit, tenMonthsSalary, totalEncashment);
+    const taxableAmount = Math.max(0, totalEncashment - exemptAmount);
+    
+    resultDiv.innerHTML = `
+        <h4>Leave Encashment Calculation</h4>
+        <p><strong>Last Drawn Salary:</strong> ₹${salary.toLocaleString()}</p>
+        <p><strong>Leave Days Encashed:</strong> ${leaveDays}</p>
+        <p><strong>Daily Salary:</strong> ₹${dailySalary.toLocaleString()}</p>
+        <p><strong>Total Encashment:</strong> ₹${totalEncashment.toLocaleString()}</p>
+        <p><strong>Exempt Amount:</strong> ₹${exemptAmount.toLocaleString()}</p>
+        <p><strong>Taxable Amount:</strong> ₹${taxableAmount.toLocaleString()}</p>
+    `;
+}
+
+function compareRegimes() {
+    const income = parseFloat(document.getElementById('regime-income').value);
+    const deduction80C = parseFloat(document.getElementById('regime-80c').value) || 0;
+    const resultDiv = document.getElementById('regime-result');
+    
+    if (!income || income <= 0) {
+        resultDiv.innerHTML = '<p class="error">Please enter a valid annual income.</p>';
+        return;
+    }
+    
+    // New Tax Regime Calculation
+    let newRegimeTax = 0;
+    if (income <= 300000) newRegimeTax = 0;
+    else if (income <= 700000) newRegimeTax = (income - 300000) * 0.05;
+    else if (income <= 1000000) newRegimeTax = 20000 + (income - 700000) * 0.10;
+    else if (income <= 1200000) newRegimeTax = 50000 + (income - 1000000) * 0.15;
+    else if (income <= 1500000) newRegimeTax = 80000 + (income - 1200000) * 0.20;
+    else newRegimeTax = 140000 + (income - 1500000) * 0.30;
+    
+    newRegimeTax *= 1.04; // Add 4% cess
+    
+    // Old Tax Regime Calculation
+    const taxableIncome = Math.max(0, income - deduction80C - 50000); // Standard deduction
+    let oldRegimeTax = 0;
+    if (taxableIncome <= 250000) oldRegimeTax = 0;
+    else if (taxableIncome <= 500000) oldRegimeTax = (taxableIncome - 250000) * 0.05;
+    else if (taxableIncome <= 1000000) oldRegimeTax = 12500 + (taxableIncome - 500000) * 0.20;
+    else oldRegimeTax = 112500 + (taxableIncome - 1000000) * 0.30;
+    
+    oldRegimeTax *= 1.04; // Add 4% cess
+    
+    const savings = oldRegimeTax - newRegimeTax;
+    const recommendedRegime = newRegimeTax < oldRegimeTax ? 'New Tax Regime' : 'Old Tax Regime';
+    
+    resultDiv.innerHTML = `
+        <h4>Tax Regime Comparison</h4>
+        <div class="regime-comparison">
+            <div class="regime-option">
+                <h5>New Tax Regime</h5>
+                <p><strong>Tax Liability:</strong> ₹${newRegimeTax.toLocaleString()}</p>
+                <p>No deductions allowed</p>
+            </div>
+            <div class="regime-option">
+                <h5>Old Tax Regime</h5>
+                <p><strong>Tax Liability:</strong> ₹${oldRegimeTax.toLocaleString()}</p>
+                <p>With ₹${deduction80C.toLocaleString()} deductions</p>
+            </div>
+        </div>
+        <p><strong>Recommended:</strong> ${recommendedRegime}</p>
+        <p><strong>Potential Savings:</strong> ₹${Math.abs(savings).toLocaleString()}</p>
+    `;
+}
