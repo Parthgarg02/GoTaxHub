@@ -1,4 +1,4 @@
-// TaxPro Services - JavaScript functionality
+// GoTaxHub - JavaScript functionality
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
@@ -544,7 +544,7 @@ document.addEventListener('keydown', function(e) {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('TaxPro Services website initialized'); // Debug log
+    console.log('GoTaxHub website initialized'); // Debug log
     
     // Ensure home page is shown by default
     const homeNavLink = document.querySelector('.nav__link[href="#home"]');
