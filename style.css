@@ -756,8 +756,8 @@ select.form-control {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-16) var(--space-16);
-    min-height: 70px;
+    padding: var(--space-8) var(--space-16);
+    min-height: 80px;
 }
 
 .nav__brand {
@@ -780,7 +780,7 @@ select.form-control {
 }
 
 .nav__logo-img {
-    height: 240px;
+    height: 50px;
     width: auto;
     vertical-align: middle;
     transition: transform var(--duration-fast) var(--ease-standard);
@@ -795,7 +795,8 @@ select.form-control {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: var(--space-24);
+    gap: var(--space-20);
+    align-items: center;
 }
 
 .nav__link {
@@ -1863,10 +1864,10 @@ main {
 @media (max-width: 768px) {
     .nav__menu {
         position: fixed;
-        top: 70px;
+        top: 80px;
         left: -100%;
         width: 100%;
-        height: calc(100vh - 70px);
+        height: calc(100vh - 80px);
         background: var(--color-surface);
         flex-direction: column;
         justify-content: flex-start;
