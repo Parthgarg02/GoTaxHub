@@ -773,11 +773,21 @@ select.form-control {
     margin: 0;
 }
 
+.nav__logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
 .nav__logo-img {
     height: 40px;
     width: auto;
-    margin-right: 10px;
     vertical-align: middle;
+    transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.nav__logo-img:hover {
+    transform: scale(1.05);
 }
 
 .nav__menu {
