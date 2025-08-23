@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initNavigation();
     initMobileMenu();
+    initDropdowns();
     initPricingToggle();
     initFAQ();
     initContactForm();
@@ -126,6 +127,50 @@ function initMobileMenu() {
             }
         });
     }
+}
+
+// Dropdown functionality
+function initDropdowns() {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    
+    dropdownToggles.forEach(toggle => {
+        // For mobile, add click functionality
+        toggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = this.parentElement;
+                const menu = dropdown.querySelector('.dropdown-menu');
+                
+                // Toggle active class
+                dropdown.classList.toggle('active');
+                
+                // Close other dropdowns
+                dropdownToggles.forEach(otherToggle => {
+                    if (otherToggle !== toggle) {
+                        otherToggle.parentElement.classList.remove('active');
+                    }
+                });
+            }
+        });
+    });
+
+    // Handle dropdown clicks in mobile
+    document.querySelectorAll('.dropdown-menu a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                // Close mobile menu
+                const navMenu = document.getElementById('nav-menu');
+                if (navMenu) {
+                    navMenu.classList.remove('active');
+                }
+                
+                // Close dropdowns
+                dropdownToggles.forEach(toggle => {
+                    toggle.parentElement.classList.remove('active');
+                });
+            }
+        });
+    });
 }
 
 // Pricing toggle functionality
