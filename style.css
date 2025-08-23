@@ -780,7 +780,7 @@ select.form-control {
 }
 
 .nav__logo-img {
-    height: 60px;
+    height: 240px;
     width: auto;
     vertical-align: middle;
     transition: transform var(--duration-fast) var(--ease-standard);
@@ -821,12 +821,6 @@ select.form-control {
 .dropdown-toggle {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
-}
-
-.dropdown-arrow {
-    font-size: 0.8rem;
-    transition: transform var(--duration-fast) var(--ease-standard);
 }
 
 .dropdown-menu {
@@ -852,10 +846,6 @@ select.form-control {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-}
-
-.nav__dropdown:hover .dropdown-arrow {
-    transform: rotate(180deg);
 }
 
 .dropdown-menu li {
