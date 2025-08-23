@@ -780,7 +780,7 @@ select.form-control {
 }
 
 .nav__logo-img {
-    height: 50px;
+    height: 60px;
     width: auto;
     vertical-align: middle;
     transition: transform var(--duration-fast) var(--ease-standard);
