@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactForm();
     initSmoothScrolling();
     initServiceCardInteractions();
+    initTestimonialsSlider();
 });
 
 // Navigation functionality
@@ -1088,4 +1089,134 @@ function compareRegimes() {
         <p><strong>Recommended:</strong> ${recommendedRegime}</p>
         <p><strong>Potential Savings:</strong> ₹${Math.abs(savings).toLocaleString()}</p>
     `;
+}
+
+// Testimonials Slider functionality
+let currentTestimonialSlide = 0;
+const totalTestimonials = 8;
+let testimonialSlideInterval;
+
+function initTestimonialsSlider() {
+    startAutoSlide();
+    updateSlider();
+}
+
+function startAutoSlide() {
+    testimonialSlideInterval = setInterval(() => {
+        nextSlide();
+    }, 4000); // Auto-slide every 4 seconds
+}
+
+function stopAutoSlide() {
+    clearInterval(testimonialSlideInterval);
+}
+
+function nextSlide() {
+    if (currentTestimonialSlide < totalTestimonials - 4) {
+        currentTestimonialSlide++;
+    } else {
+        currentTestimonialSlide = 0;
+    }
+    updateSlider();
+}
+
+function previousSlide() {
+    stopAutoSlide();
+    if (currentTestimonialSlide > 0) {
+        currentTestimonialSlide--;
+    } else {
+        currentTestimonialSlide = totalTestimonials - 4;
+    }
+    updateSlider();
+    setTimeout(startAutoSlide, 2000); // Restart auto-slide after 2 seconds
+}
+
+function currentSlide(n) {
+    stopAutoSlide();
+    currentTestimonialSlide = n - 1;
+    updateSlider();
+    setTimeout(startAutoSlide, 2000); // Restart auto-slide after 2 seconds
+}
+
+function updateSlider() {
+    const track = document.querySelector('.testimonials-track');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (track) {
+        const offset = -(currentTestimonialSlide * 25); // 25% per slide (showing 4 at a time)
+        track.style.transform = `translateX(${offset}%)`;
+    }
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+        dot.classList.remove('active');
+        if (index === Math.floor(currentTestimonialSlide / 1)) {
+            dot.classList.add('active');
+        }
+    });
+}
+
+// Services Navigation Functions
+function hideAllServiceDetails() {
+    const detailSections = document.querySelectorAll('.service-details');
+    detailSections.forEach(section => {
+        section.classList.add('hidden');
+    });
+}
+
+function showServiceDetail(serviceId) {
+    hideAllServiceDetails();
+    const targetSection = document.getElementById(serviceId);
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function showITRServices() {
+    showServiceDetail('itr-details');
+}
+
+function showGSTServices() {
+    showServiceDetail('gst-details');
+}
+
+function showTDSServices() {
+    showServiceDetail('tds-details');
+}
+
+function showEntityServices() {
+    showServiceDetail('entity-details');
+}
+
+function showTaxPlanningServices() {
+    showServiceDetail('tax-planning-details');
+}
+
+function showAuditServices() {
+    showServiceDetail('audit-details');
+}
+
+function showNRIServices() {
+    showServiceDetail('nri-details');
+}
+
+function showTrustServices() {
+    showServiceDetail('trust-details');
+}
+
+function showStartupServices() {
+    showServiceDetail('startup-details');
+}
+
+function showPFServices() {
+    showServiceDetail('pf-details');
+}
+
+function showPayrollServices() {
+    showServiceDetail('payroll-details');
+}
+
+function showPANTANServices() {
+    showServiceDetail('pantan-details');
 }

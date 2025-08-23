@@ -1097,11 +1097,26 @@ main {
     margin-top: var(--space-32);
 }
 
+.testimonials-slider {
+    position: relative;
+    overflow: hidden;
+    margin-top: var(--space-32);
+}
+
+.testimonials-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: calc(100% * 8);
+}
+
 .testimonial {
     background: var(--color-background);
     border-radius: var(--radius-lg);
     padding: var(--space-24);
     border: 1px solid var(--color-card-border);
+    min-width: calc(25% - var(--space-18));
+    margin-right: var(--space-24);
+    flex-shrink: 0;
 }
 
 .testimonial__rating {
@@ -1129,6 +1144,179 @@ main {
 .testimonial__author span {
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
+}
+
+.slider-navigation {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-16);
+    margin-top: var(--space-24);
+}
+
+.slider-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover {
+    background: var(--color-primary-hover);
+    transform: scale(1.1);
+}
+
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(33, 128, 141, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--color-primary);
+    transform: scale(1.2);
+}
+
+/* Services Overview */
+.services-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-24);
+    margin-top: var(--space-32);
+}
+
+.service-category {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    border: 1px solid var(--color-card-border);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.service-category:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.service-category .service-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-16);
+}
+
+.service-category h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-xl);
+}
+
+.service-category p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-20);
+    line-height: var(--line-height-normal);
+}
+
+.service-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: var(--space-12) var(--space-20);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.service-btn:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Service Details */
+.service-details {
+    margin-top: var(--space-32);
+    padding-top: var(--space-24);
+    border-top: 2px solid var(--color-primary);
+}
+
+.service-details.hidden {
+    display: none;
+}
+
+.service-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-20);
+    margin-top: var(--space-24);
+}
+
+.service-item {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    padding: var(--space-20);
+    border: 1px solid var(--color-card-border);
+    text-align: center;
+}
+
+.service-item h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-lg);
+}
+
+.service-item p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-16);
+    line-height: var(--line-height-normal);
+}
+
+.price-display {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-16);
+}
+
+.choose-plan-btn, .query-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: var(--space-10) var(--space-20);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.choose-plan-btn:hover, .query-btn:hover {
+    background: var(--color-primary-hover);
+}
+
+.query-btn {
+    background: var(--color-secondary);
+    color: var(--color-text);
+}
+
+.query-btn:hover {
+    background: var(--color-secondary-hover);
 }
 
 /* Pricing Preview */
@@ -1406,7 +1594,7 @@ main {
 .about-section p {
     color: var(--color-text);
     line-height: var(--line-height-normal);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-2xl);
 }
 
 .team-section {
