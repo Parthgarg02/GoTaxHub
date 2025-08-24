@@ -1614,7 +1614,7 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: var(--space-32);
-    margin-bottom: var(--space-64); /* Increased spacing before certificates */
+    margin-bottom: 80px; /* Much larger spacing before certificates */
 }
 
 .mission-vision-card {
@@ -1726,6 +1726,7 @@ main {
     .mission-vision-container {
         grid-template-columns: 1fr;
         gap: var(--space-24);
+        margin-bottom: 60px; /* Responsive spacing for mobile */
     }
     
     .mission-vision-card {
@@ -1739,6 +1740,10 @@ main {
     .highlight-points {
         flex-direction: column;
         align-items: center;
+    }
+    
+    .certifications {
+        margin-top: 40px; /* Reduced spacing for mobile */
     }
 }
 
@@ -1806,6 +1811,7 @@ main {
     background: linear-gradient(135deg, var(--color-surface), var(--color-bg-1));
     border-radius: var(--radius-lg);
     padding: var(--space-48) var(--space-40); /* Increased top/bottom padding */
+    margin-top: 60px; /* Add significant top margin for clear separation */
     border: 1px solid var(--color-card-border);
     position: relative;
     overflow: hidden;
