@@ -1094,13 +1094,34 @@ function compareRegimes() {
 // Testimonials Slider functionality
 let currentTestimonialSlide = 0;
 const totalTestimonials = 8;
-const testimonialsPerView = 4; // Show 4 testimonials at once
-const totalSlides = Math.ceil(totalTestimonials / testimonialsPerView); // 2 slides total (8 testimonials / 4 per view)
+let testimonialsPerView = 4; // Show 4 testimonials at once on desktop
+let totalSlides = Math.ceil(totalTestimonials / testimonialsPerView);
 let testimonialSlideInterval;
 
 function initTestimonialsSlider() {
+    updateResponsiveSettings();
     startAutoSlide();
     updateSlider();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        updateResponsiveSettings();
+        updateSlider();
+    });
+}
+
+function updateResponsiveSettings() {
+    if (window.innerWidth <= 768) {
+        testimonialsPerView = 1; // Show 1 testimonial on mobile
+    } else {
+        testimonialsPerView = 4; // Show 4 testimonials on desktop
+    }
+    totalSlides = Math.ceil(totalTestimonials / testimonialsPerView);
+    
+    // Reset slide if current slide is out of bounds
+    if (currentTestimonialSlide >= totalSlides) {
+        currentTestimonialSlide = 0;
+    }
 }
 
 function startAutoSlide() {
@@ -1137,16 +1158,30 @@ function updateSlider() {
     const dots = document.querySelectorAll('.dot');
     
     if (track) {
-        // Move by 100% for each slide since we're showing 4 testimonials at once
-        const offset = -(currentTestimonialSlide * 100);
+        let offset;
+        if (window.innerWidth <= 768) {
+            // Mobile: move by (100% / total testimonials) for each testimonial
+            offset = -(currentTestimonialSlide * (100 / totalTestimonials));
+        } else {
+            // Desktop: move by 100% for each slide (showing 4 at once)
+            offset = -(currentTestimonialSlide * 100);
+        }
         track.style.transform = `translateX(${offset}%)`;
     }
     
-    // Update dots - only show dots for the number of slides (2 dots for 2 slides)
+    // Update dots
     dots.forEach((dot, index) => {
         dot.classList.remove('active');
-        if (index === currentTestimonialSlide) {
-            dot.classList.add('active');
+        if (window.innerWidth <= 768) {
+            // Mobile: show active dot based on current testimonial group
+            if (index === Math.floor(currentTestimonialSlide / 4)) {
+                dot.classList.add('active');
+            }
+        } else {
+            // Desktop: show active dot based on current slide
+            if (index === currentTestimonialSlide) {
+                dot.classList.add('active');
+            }
         }
     });
 }

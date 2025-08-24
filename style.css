@@ -1107,15 +1107,21 @@ main {
     display: flex;
     transition: transform 0.5s ease;
     width: calc(100% * 2); /* 2 slides total: 8 testimonials / 4 per view */
+    gap: var(--space-20);
 }
 
 .testimonial {
     background: var(--color-background);
     border-radius: var(--radius-lg);
-    padding: var(--space-24);
+    padding: var(--space-20);
     border: 1px solid var(--color-card-border);
-    width: calc(50% / 2 - var(--space-18)); /* 4 testimonials per slide across 2 slides = 50% of total width / 2 */
-    margin-right: var(--space-24);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: calc(50% / 2 - var(--space-15)); /* 4 testimonials per slide across 2 slides */
+    min-height: 320px; /* Portrait orientation - taller cards */
+    max-height: 380px; /* Maximum height to maintain consistency */
+    overflow: hidden;
     flex-shrink: 0;
 }
 
@@ -1129,12 +1135,18 @@ main {
     margin-bottom: var(--space-16);
     font-style: italic;
     line-height: var(--line-height-normal);
+    flex-grow: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* Limit to 6 lines for portrait layout */
+    -webkit-box-orient: vertical;
 }
 
 .testimonial__author {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    margin-top: auto; /* Push to bottom of flex container */
 }
 
 .testimonial__author strong {
@@ -2189,6 +2201,21 @@ main {
     .testimonial,
     .pricing-card {
         padding: var(--space-16);
+    }
+
+    /* Mobile testimonials adjustments */
+    .testimonial {
+        min-height: 280px;
+        max-height: 320px;
+        width: calc(100% - var(--space-16));
+    }
+
+    .testimonials-track {
+        width: calc(100% * 8); /* Show 1 testimonial per slide on mobile */
+    }
+
+    .testimonial__text {
+        -webkit-line-clamp: 4; /* Reduce lines on mobile */
     }
 }
 
