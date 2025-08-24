@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax & Financial Calculators - GoTaxHub</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="nav__brand">
+                <a href="index.html" class="nav__logo-link">
+                    <img src="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png" alt="GoTaxHub" class="nav__logo-img">
+                </a>
+            </div>
+            <ul class="nav__menu" id="nav-menu">
+                <li><a href="index.html" class="nav__link">Home</a></li>
+                <li><a href="about.html" class="nav__link">About Us</a></li>
+                <li class="nav__dropdown">
+                    <a href="tools.html" class="nav__link dropdown-toggle active">Tools</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="income-tax-calculator.html">Income Tax Calculator</a></li>
+                        <li><a href="tds-calculator.html">TDS Calculator</a></li>
+                        <li><a href="gratuity-calculator.html">Gratuity Calculator</a></li>
+                        <li><a href="tools.html">More Tools</a></li>
+                    </ul>
+                </li>
+                <li class="nav__dropdown">
+                    <a href="services.html" class="nav__link dropdown-toggle">Services</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="services.html#itr-filing">ITR Filing</a></li>
+                        <li><a href="services.html#gst-services">GST Services</a></li>
+                        <li><a href="services.html#tax-planning">Tax Planning</a></li>
+                        <li><a href="services.html#business-advisory">Business Advisory</a></li>
+                    </ul>
+                </li>
+                <li class="nav__dropdown">
+                    <a href="pricing.html" class="nav__link dropdown-toggle">Pricing</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="pricing.html#salary-plans">Salary Plans</a></li>
+                        <li><a href="pricing.html#business-plans">Business Plans</a></li>
+                        <li><a href="pricing.html#capital-gains">Capital Gains</a></li>
+                        <li><a href="pricing.html#nri-services">NRI Services</a></li>
+                    </ul>
+                </li>
+                <li><a href="contact.html" class="nav__link">Contact Us</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="pricing.html" class="btn btn--outline btn--sm">File ITR Now</a>
+                <a href="contact.html" class="btn btn--primary btn--sm">Get Expert Help</a>
+            </div>
+            <div class="nav__toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <section class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Tax & Financial Calculators</h1>
+                    <p>Free online tools to help with your tax planning and calculations</p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">📄</div>
+                        <h3>Income Tax Calculator</h3>
+                        <p>Professional income tax liability calculator with detailed analysis for all taxpayer categories</p>
+                        <div class="tool-features">
+                            <span class="feature">✓ All Taxpayer Categories</span>
+                            <span class="feature">✓ Both Tax Regimes</span>
+                            <span class="feature">✓ Latest Tax Slabs</span>
+                        </div>
+                        <a href="income-tax-calculator.html" class="btn btn--primary btn--full-width">Open Calculator</a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-icon">✅</div>
+                        <h3>Check Which ITR Form Applicable</h3>
+                        <p>Check which ITR form you need to file based on your income sources</p>
+                        <div class="tool-form">
+                            <select id="income-type">
+                                <option value="">Select Income Type</option>
+                                <option value="salary">Salary Only</option>
+                                <option value="salary-property">Salary + House Property</option>
+                                <option value="business">Business Income</option>
+                                <option value="capital-gains">Capital Gains</option>
+                                <option value="foreign">Foreign Income</option>
+                                <option value="firm">Partnership Firm/LLP</option>
+                                <option value="company">Company</option>
+                                <option value="trust">Trust/Political Party</option>
+                            </select>
+                            <button onclick="checkITREligibility()" class="btn btn--primary btn--sm">Check Form</button>
+                            <div id="itr-eligibility-result" class="tool-result"></div>
+                        </div>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-icon">💰</div>
+                        <h3>Gratuity Calculator</h3>
+                        <p>Calculate gratuity amount and tax implications for government and private employees</p>
+                        <div class="tool-features">
+                            <span class="feature">✓ Both Sectors</span>
+                            <span class="feature">✓ Tax Exemption Rules</span>
+                            <span class="feature">✓ Updated ₹25 Lakh Limit</span>
+                        </div>
+                        <a href="gratuity-calculator.html" class="btn btn--primary btn--full-width">Open Calculator</a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-icon">📊</div>
+                        <h3>TDS Calculator</h3>
+                        <p>Calculate TDS on salary, interest, rent, and professional payments with latest rates</p>
+                        <div class="tool-features">
+                            <span class="feature">✓ All TDS Sections</span>
+                            <span class="feature">✓ Latest Rates 2024</span>
+                            <span class="feature">✓ Professional Grade</span>
+                        </div>
+                        <a href="tds-calculator.html" class="btn btn--primary btn--full-width">Open Calculator</a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-icon">💵</div>
+                        <h3>Leave Encashment Calculator</h3>
+                        <p>Calculate tax on leave encashment for retiring employees</p>
+                        <div class="tool-form">
+                            <input type="number" placeholder="Last Drawn Salary (Basic + DA)" id="leave-salary">
+                            <input type="number" placeholder="Leave Days" id="leave-days">
+                            <input type="number" placeholder="Years of Service" id="leave-years">
+                            <select id="leave-employee-type">
+                                <option value="private">Non-Government Employee</option>
+                                <option value="government">Government Employee</option>
+                            </select>
+                            <button onclick="calculateLeaveEncashment()" class="btn btn--primary btn--sm">Calculate</button>
+                            <div id="leave-result" class="tool-result"></div>
+                        </div>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-icon">⚖️</div>
+                        <h3>Old vs New Tax Regime Calculator</h3>
+                        <p>Compare tax liability under old and new tax regime</p>
+                        <div class="tool-form">
+                            <input type="number" placeholder="Annual Income" id="regime-income">
+                            <input type="number" placeholder="80C Deductions" id="regime-80c">
+                            <button onclick="compareRegimes()" class="btn btn--primary btn--sm">Compare</button>
+                            <div id="regime-result" class="tool-result"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tools-disclaimer">
+                    <p><strong>Disclaimer:</strong> These calculators are for estimation purposes only. Actual tax calculations may vary based on specific circumstances. Please consult our CA experts for accurate tax planning.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GoTaxHub</h3>
+                    <p>Expert CA services for your tax and business needs. Trusted by 10,000+ clients across india.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="services.html#itr-filing">ITR Filing (All Forms)</a></li>
+                        <li><a href="services.html#gst-services">GST Registration & Compliance</a></li>
+                        <li><a href="services.html#tds-services">TDS & TCS Services</a></li>
+                        <li><a href="services.html#tax-planning">Tax Planning & Advisory</a></li>
+                        <li><a href="services.html#audit-services">Audit & Assurance</a></li>
+                        <li><a href="services.html#nri-services">NRI Tax Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li>📧 info@gotaxhub.com</li>
+                        <li>📞 +91-7905208874, +91-9140830544</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GoTaxHub. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
