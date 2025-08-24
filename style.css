@@ -1614,7 +1614,7 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: var(--space-32);
-    margin-bottom: var(--space-48);
+    margin-bottom: var(--space-64); /* Increased spacing before certificates */
 }
 
 .mission-vision-card {
@@ -1805,7 +1805,7 @@ main {
 .certifications {
     background: linear-gradient(135deg, var(--color-surface), var(--color-bg-1));
     border-radius: var(--radius-lg);
-    padding: var(--space-40);
+    padding: var(--space-48) var(--space-40); /* Increased top/bottom padding */
     border: 1px solid var(--color-card-border);
     position: relative;
     overflow: hidden;
@@ -1814,7 +1814,8 @@ main {
 
 .certifications h2 {
     color: var(--color-primary);
-    margin-bottom: var(--space-12);
+    margin-top: var(--space-8); /* Add top margin for better spacing */
+    margin-bottom: var(--space-16); /* Slightly increase bottom margin */
     text-align: center;
     font-size: var(--font-size-2xl);
 }
