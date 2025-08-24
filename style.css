@@ -2493,6 +2493,149 @@ main {
     color: white;
 }
 
+/* Dedicated Page Styles */
+.page-main {
+    padding-top: 70px; /* Account for fixed header */
+}
+
+.page-hero {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-teal-400));
+    color: white;
+    padding: var(--space-48) 0 var(--space-32);
+}
+
+.page-hero-content {
+    text-align: center;
+}
+
+.services-section,
+.pricing-section,
+.contact-section {
+    padding: var(--space-48) 0;
+}
+
+.service-section {
+    margin-bottom: var(--space-48);
+    padding-bottom: var(--space-32);
+    border-bottom: 1px solid var(--color-card-border);
+}
+
+.service-section:last-child {
+    border-bottom: none;
+}
+
+.pricing-features {
+    margin-top: var(--space-48);
+    text-align: center;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-24);
+    margin-top: var(--space-32);
+}
+
+.feature-item {
+    background: var(--color-surface);
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-12);
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: var(--space-48);
+    margin-bottom: var(--space-48);
+}
+
+.contact-info-section {
+    background: var(--color-surface);
+    padding: var(--space-32);
+    border-radius: var(--radius-lg);
+    height: fit-content;
+}
+
+.contact-info-item {
+    display: flex;
+    align-items: start;
+    gap: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.contact-cta {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-teal-400));
+    color: white;
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    margin-top: var(--space-24);
+}
+
+.cta-buttons {
+    display: flex;
+    gap: var(--space-12);
+    justify-content: center;
+    margin-top: var(--space-16);
+}
+
+.why-choose-us {
+    background: var(--color-bg-1);
+    padding: var(--space-48) 0;
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-32);
+}
+
+.reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-24);
+    margin-top: var(--space-32);
+}
+
+.reason-item {
+    background: var(--color-background);
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.reason-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-12);
+}
+
+@media (max-width: 768px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+    }
+}
+
 /* Dedicated Calculator Page Styles */
 .calculator-main {
     padding-top: 70px; /* Account for fixed header */

@@ -20,7 +20,7 @@
             </div>
             <ul class="nav__menu" id="nav-menu">
                 <li><a href="#home" class="nav__link active">Home</a></li>
-                <li><a href="#about" class="nav__link">About Us</a></li>
+                <li><a href="about.html" class="nav__link">About Us</a></li>
                 <li class="nav__dropdown">
                     <a href="#tools" class="nav__link dropdown-toggle">Tools</a>
                     <ul class="dropdown-menu">
@@ -31,28 +31,28 @@
                     </ul>
                 </li>
                 <li class="nav__dropdown">
-                    <a href="#services" class="nav__link dropdown-toggle">Services</a>
+                    <a href="services.html" class="nav__link dropdown-toggle">Services</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#services">ITR Filing</a></li>
-                        <li><a href="#services">GST Services</a></li>
-                        <li><a href="#services">Tax Planning</a></li>
-                        <li><a href="#services">Business Advisory</a></li>
+                        <li><a href="services.html#itr-filing">ITR Filing</a></li>
+                        <li><a href="services.html#gst-services">GST Services</a></li>
+                        <li><a href="services.html#tax-planning">Tax Planning</a></li>
+                        <li><a href="services.html#business-advisory">Business Advisory</a></li>
                     </ul>
                 </li>
                 <li class="nav__dropdown">
-                    <a href="#pricing" class="nav__link dropdown-toggle">Pricing</a>
+                    <a href="pricing.html" class="nav__link dropdown-toggle">Pricing</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#pricing">Salary Plans</a></li>
-                        <li><a href="#pricing">Business Plans</a></li>
-                        <li><a href="#pricing">Capital Gains</a></li>
-                        <li><a href="#pricing">NRI Services</a></li>
+                        <li><a href="pricing.html#salary-plans">Salary Plans</a></li>
+                        <li><a href="pricing.html#business-plans">Business Plans</a></li>
+                        <li><a href="pricing.html#capital-gains">Capital Gains</a></li>
+                        <li><a href="pricing.html#nri-services">NRI Services</a></li>
                     </ul>
                 </li>
-                <li><a href="#contact" class="nav__link">Contact Us</a></li>
+                <li><a href="contact.html" class="nav__link">Contact Us</a></li>
             </ul>
             <div class="nav__cta">
-                <a href="#pricing" class="btn btn--outline btn--sm">File ITR Now</a>
-                <a href="#contact" class="btn btn--primary btn--sm">Get Expert Help</a>
+                <a href="pricing.html" class="btn btn--outline btn--sm">File ITR Now</a>
+                <a href="contact.html" class="btn btn--primary btn--sm">Get Expert Help</a>
             </div>
             <div class="nav__toggle" id="nav-toggle">
                 <span></span>
@@ -715,7 +715,7 @@
                     <div class="pricing-plan">
                         <h3>Salary + Multiple Properties</h3>
                         <div class="plan-price">
-                            <span class="price expert-price">₹1,039</span>
+                            <span class="price expert-price">₹1,199</span>
                             <small>*Exclusive of Taxes</small>
                         </div>
                         <div class="suited-for">
@@ -921,7 +921,7 @@
                 <div class="contact-content">
                     <div class="contact-form-section">
                         <h2>Send us a Message</h2>
-                        <form class="contact-form" id="contact-form">
+                        <form class="contact-form" id="contact-form" method="POST" netlify>
                             <div class="form-group">
                                 <label for="name" class="form-label">Full Name *</label>
                                 <input type="text" id="name" name="name" class="form-control" required>

@@ -288,26 +288,37 @@ function initContactForm() {
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
             
-            // Create mailto link to send email
-            const subject = encodeURIComponent(`Contact Form Submission from ${name}`);
-            const body = encodeURIComponent(
-                `Name: ${name}\n` +
-                `Email: ${email}\n` +
-                `Phone: ${phone}\n` +
-                `Service: ${service || 'Not specified'}\n` +
-                `Message: ${message || 'No message provided'}`
-            );
-            
-            const mailtoLink = `mailto:info@gotaxhub.com?subject=${subject}&body=${body}`;
-            window.location.href = mailtoLink;
-            
-            setTimeout(() => {
+            // Submit form using fetch API for proper server-side processing
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(new FormData(this)).toString()
+            })
+            .then(() => {
                 showNotification('Thank you for your message! Our team will contact you within 24 hours.', 'success');
                 this.reset();
+            })
+            .catch((error) => {
+                console.error('Form submission error:', error);
+                // Fallback to mailto if form submission fails
+                const subject = encodeURIComponent(`Contact Form Submission from ${name}`);
+                const body = encodeURIComponent(
+                    `Name: ${name}\n` +
+                    `Email: ${email}\n` +
+                    `Phone: ${phone}\n` +
+                    `Service: ${service || 'Not specified'}\n` +
+                    `Message: ${message || 'No message provided'}`
+                );
                 
+                const mailtoLink = `mailto:info@gotaxhub.com?subject=${subject}&body=${body}`;
+                window.location.href = mailtoLink;
+                
+                showNotification('Please complete the email submission in your email client.', 'info');
+            })
+            .finally(() => {
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
-            }, 1000);
+            });
         });
     }
 }
