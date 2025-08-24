@@ -15,86 +15,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Navigation functionality
 function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav__link');
-    const pages = document.querySelectorAll('.page');
+    // Only handle smooth scrolling for anchor links (starting with #) on the same page
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
     
-    navLinks.forEach(link => {
+    anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
+            const href = this.getAttribute('href');
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
             
-            const targetId = this.getAttribute('href').substring(1);
-            console.log('Navigating to:', targetId); // Debug log
-            
-            // Remove active class from all nav links and pages
-            navLinks.forEach(l => l.classList.remove('active'));
-            pages.forEach(p => p.classList.remove('active'));
-            
-            // Add active class to clicked nav link
-            this.classList.add('active');
-            
-            // Show target page
-            const targetPage = document.getElementById(targetId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                console.log('Page activated:', targetId); // Debug log
-            } else {
-                console.error('Page not found:', targetId); // Debug log
+            // Only prevent default if the target element exists on current page
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({ behavior: 'smooth' });
             }
-            
-            // Close mobile menu if open
+        });
+    });
+    
+    // Handle mobile menu closing for all navigation links
+    const navLinks = document.querySelectorAll('.nav__link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Close mobile menu if open (but don't prevent navigation)
             const navMenu = document.getElementById('nav-menu');
             if (navMenu) {
                 navMenu.classList.remove('active');
             }
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-    });
-    
-    // Handle all internal page links
-    const internalLinks = document.querySelectorAll('a[href^="#"]');
-    internalLinks.forEach(link => {
-        if (!link.classList.contains('nav__link')) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href').substring(1);
-                navigateToPage(targetId);
-            });
-        }
     });
 }
 
-// Helper function to navigate to a page
-function navigateToPage(pageId) {
-    console.log('navigateToPage called with:', pageId); // Debug log
-    
-    const navLinks = document.querySelectorAll('.nav__link');
-    const pages = document.querySelectorAll('.page');
-    
-    // Remove active class from all nav links and pages
-    navLinks.forEach(l => l.classList.remove('active'));
-    pages.forEach(p => p.classList.remove('active'));
-    
-    // Find and activate the corresponding nav link
-    const correspondingNavLink = document.querySelector(`.nav__link[href="#${pageId}"]`);
-    if (correspondingNavLink) {
-        correspondingNavLink.classList.add('active');
-    }
-    
-    // Show target page
-    const targetPage = document.getElementById(pageId);
-    if (targetPage) {
-        targetPage.classList.add('active');
-        console.log('Successfully navigated to:', pageId); // Debug log
-    } else {
-        console.error('Target page not found:', pageId); // Debug log
-    }
-    
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
 // Mobile menu functionality
 function initMobileMenu() {
