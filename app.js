@@ -614,6 +614,286 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Enhanced Tax Calculator Functions
+function calculateEnhancedITR() {
+    // Get all form values
+    const taxpayerCategory = document.getElementById('taxpayer-category').value;
+    const ageCategory = document.getElementById('age-category').value;
+    const residentialStatus = document.getElementById('residential-status').value;
+    const assessmentYear = document.getElementById('itr-year-enhanced').value;
+    const taxRegime = document.getElementById('tax-regime-enhanced').value;
+    
+    // Income details
+    const grossSalary = parseFloat(document.getElementById('gross-salary').value) || 0;
+    const houseProperty = parseFloat(document.getElementById('house-property').value) || 0;
+    const businessIncome = parseFloat(document.getElementById('business-income').value) || 0;
+    const capitalGains = parseFloat(document.getElementById('capital-gains').value) || 0;
+    const otherSources = parseFloat(document.getElementById('other-sources').value) || 0;
+    
+    // Deductions (only for old regime)
+    const section80C = parseFloat(document.getElementById('section-80c').value) || 0;
+    const section80D = parseFloat(document.getElementById('section-80d').value) || 0;
+    const section80G = parseFloat(document.getElementById('section-80g').value) || 0;
+    
+    const resultDiv = document.getElementById('enhanced-itr-result');
+    
+    // Calculate total income
+    const totalIncome = grossSalary + houseProperty + businessIncome + capitalGains + otherSources;
+    
+    if (totalIncome <= 0) {
+        resultDiv.innerHTML = '<p class="error">Please enter valid income details.</p>';
+        return;
+    }
+    
+    let standardDeduction = 0;
+    let basicExemption = 0;
+    let totalDeductions = 0;
+    let regimeName = '';
+    
+    // Set standard deduction based on regime
+    if (taxRegime === 'new') {
+        regimeName = 'New Tax Regime (Section 115BAC)';
+        standardDeduction = 75000; // Budget 2024
+        basicExemption = getBasicExemption(ageCategory, 'new');
+    } else {
+        regimeName = 'Old Tax Regime';
+        standardDeduction = 50000;
+        basicExemption = getBasicExemption(ageCategory, 'old');
+        totalDeductions = Math.min(section80C, 150000) + section80D + section80G;
+    }
+    
+    // Calculate taxable income
+    let taxableIncome = Math.max(0, totalIncome - standardDeduction - totalDeductions);
+    
+    // Calculate tax based on regime and age
+    let incomeTax = calculateTaxByRegimeAndAge(taxableIncome, taxRegime, ageCategory);
+    
+    // Add surcharge if applicable
+    let surcharge = calculateSurcharge(taxableIncome, incomeTax, taxpayerCategory);
+    
+    // Add Health and Education Cess (4%)
+    let cess = (incomeTax + surcharge) * 0.04;
+    
+    // Total tax liability
+    let totalTax = incomeTax + surcharge + cess;
+    
+    // Apply rebate if applicable
+    let rebate = calculateRebate(taxableIncome, taxRegime, incomeTax);
+    totalTax = Math.max(0, totalTax - rebate);
+    
+    // Display detailed results
+    displayEnhancedResults(resultDiv, {
+        taxpayerCategory,
+        ageCategory,
+        residentialStatus,
+        assessmentYear,
+        regimeName,
+        totalIncome,
+        standardDeduction,
+        totalDeductions,
+        taxableIncome,
+        basicExemption,
+        incomeTax,
+        surcharge,
+        cess,
+        rebate,
+        totalTax
+    });
+}
+
+function getBasicExemption(ageCategory, regime) {
+    if (regime === 'new') {
+        return 300000; // New regime basic exemption
+    } else {
+        // Old regime exemptions
+        switch (ageCategory) {
+            case 'below-60': return 250000;
+            case '60-80': return 300000;
+            case 'above-80': return 500000;
+            default: return 250000;
+        }
+    }
+}
+
+function calculateTaxByRegimeAndAge(taxableIncome, regime, ageCategory) {
+    let tax = 0;
+    
+    if (regime === 'new') {
+        // New tax regime slabs
+        if (taxableIncome <= 300000) tax = 0;
+        else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
+        else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
+        else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
+        else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
+        else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+    } else {
+        // Old regime slabs based on age
+        let exemption = getBasicExemption(ageCategory, 'old');
+        
+        if (taxableIncome <= exemption) tax = 0;
+        else if (taxableIncome <= 500000) tax = (taxableIncome - exemption) * 0.05;
+        else if (taxableIncome <= 1000000) {
+            tax = (500000 - exemption) * 0.05 + (taxableIncome - 500000) * 0.20;
+        } else {
+            tax = (500000 - exemption) * 0.05 + 500000 * 0.20 + (taxableIncome - 1000000) * 0.30;
+        }
+    }
+    
+    return Math.max(0, tax);
+}
+
+function calculateSurcharge(taxableIncome, incomeTax, taxpayerCategory) {
+    let surcharge = 0;
+    
+    if (taxpayerCategory === 'individual' || taxpayerCategory === 'huf') {
+        if (taxableIncome > 5000000 && taxableIncome <= 10000000) {
+            surcharge = incomeTax * 0.10; // 10% surcharge
+        } else if (taxableIncome > 10000000 && taxableIncome <= 20000000) {
+            surcharge = incomeTax * 0.15; // 15% surcharge
+        } else if (taxableIncome > 20000000 && taxableIncome <= 50000000) {
+            surcharge = incomeTax * 0.25; // 25% surcharge
+        } else if (taxableIncome > 50000000) {
+            surcharge = incomeTax * 0.37; // 37% surcharge
+        }
+    }
+    
+    return surcharge;
+}
+
+function calculateRebate(taxableIncome, regime, incomeTax) {
+    let rebate = 0;
+    
+    if (regime === 'new') {
+        if (taxableIncome <= 700000) {
+            rebate = Math.min(incomeTax, 25000); // Section 87A rebate
+        }
+    } else {
+        if (taxableIncome <= 500000) {
+            rebate = Math.min(incomeTax, 12500); // Section 87A rebate
+        }
+    }
+    
+    return rebate;
+}
+
+function displayEnhancedResults(resultDiv, data) {
+    resultDiv.className = 'enhanced-tool-result has-result';
+    
+    resultDiv.innerHTML = `
+        <h4>Detailed Tax Calculation - ${data.assessmentYear}</h4>
+        
+        <div class="tax-breakdown">
+            <div class="tax-item">
+                <h5>Gross Total Income</h5>
+                <div class="amount">₹${data.totalIncome.toLocaleString()}</div>
+            </div>
+            <div class="tax-item">
+                <h5>Standard Deduction</h5>
+                <div class="amount">₹${data.standardDeduction.toLocaleString()}</div>
+            </div>
+            <div class="tax-item">
+                <h5>Total Deductions</h5>
+                <div class="amount">₹${data.totalDeductions.toLocaleString()}</div>
+            </div>
+            <div class="tax-item">
+                <h5>Taxable Income</h5>
+                <div class="amount">₹${data.taxableIncome.toLocaleString()}</div>
+            </div>
+        </div>
+        
+        <div class="tax-breakdown">
+            <div class="tax-item">
+                <h5>Income Tax</h5>
+                <div class="amount">₹${Math.round(data.incomeTax).toLocaleString()}</div>
+            </div>
+            <div class="tax-item">
+                <h5>Surcharge</h5>
+                <div class="amount">₹${Math.round(data.surcharge).toLocaleString()}</div>
+            </div>
+            <div class="tax-item">
+                <h5>Health & Education Cess</h5>
+                <div class="amount">₹${Math.round(data.cess).toLocaleString()}</div>
+            </div>
+            ${data.rebate > 0 ? `
+            <div class="tax-item">
+                <h5>Rebate u/s 87A</h5>
+                <div class="amount">₹${Math.round(data.rebate).toLocaleString()}</div>
+            </div>
+            ` : ''}
+            <div class="tax-item total-tax">
+                <h5>Total Tax Liability</h5>
+                <div class="amount">₹${Math.round(data.totalTax).toLocaleString()}</div>
+            </div>
+        </div>
+        
+        <div class="calculation-summary">
+            <p><strong>Tax Regime:</strong> ${data.regimeName}</p>
+            <p><strong>Taxpayer Category:</strong> ${data.taxpayerCategory.toUpperCase()}</p>
+            <p><strong>Age Category:</strong> ${data.ageCategory.replace('-', ' to ').replace('below-60', 'Below 60 years').replace('above-80', 'Above 80 years')}</p>
+            <p><strong>Effective Tax Rate:</strong> ${((data.totalTax / data.totalIncome) * 100).toFixed(2)}%</p>
+        </div>
+        
+        <div class="tax-planning-tip">
+            <p><strong>💡 Tax Planning Tip:</strong> ${getTaxPlanningTip(data.taxRegime, data.totalDeductions, data.totalIncome)}</p>
+        </div>
+    `;
+}
+
+function getTaxPlanningTip(regime, deductions, income) {
+    if (regime === 'new') {
+        if (income <= 700000) {
+            return "You're eligible for full tax rebate under new regime. Consider maximizing your income within ₹7 lakhs limit.";
+        } else {
+            return "Compare with old regime calculations. You might benefit from old regime if you have significant deductions.";
+        }
+    } else {
+        if (deductions < 150000) {
+            return "You can save more tax by maximizing Section 80C deductions up to ₹1.5 lakhs.";
+        } else {
+            return "Great! You're utilizing maximum 80C deductions. Consider other sections like 80D for additional savings.";
+        }
+    }
+}
+
+function resetEnhancedCalculator() {
+    // Reset all form fields
+    const formElements = document.querySelectorAll('#taxpayer-category, #age-category, #residential-status, #itr-year-enhanced, #tax-regime-enhanced, #gross-salary, #house-property, #business-income, #capital-gains, #other-sources, #section-80c, #section-80d, #section-80g');
+    
+    formElements.forEach(element => {
+        if (element.tagName === 'SELECT') {
+            element.selectedIndex = 0;
+        } else {
+            element.value = '';
+        }
+    });
+    
+    // Clear results
+    document.getElementById('enhanced-itr-result').innerHTML = '';
+    document.getElementById('enhanced-itr-result').className = 'enhanced-tool-result';
+    
+    // Show/hide deduction section based on regime
+    toggleDeductionSection();
+}
+
+function toggleDeductionSection() {
+    const regime = document.getElementById('tax-regime-enhanced').value;
+    const deductionSection = document.getElementById('deduction-section');
+    
+    if (regime === 'new') {
+        deductionSection.style.display = 'none';
+    } else {
+        deductionSection.style.display = 'block';
+    }
+}
+
+// Add event listener for regime change
+document.addEventListener('DOMContentLoaded', function() {
+    const regimeSelect = document.getElementById('tax-regime-enhanced');
+    if (regimeSelect) {
+        regimeSelect.addEventListener('change', toggleDeductionSection);
+    }
+});
+
 // Tax Calculator Functions - Based on Tax2win.in formulas
 function calculateITR() {
     const income = parseFloat(document.getElementById('itr-income').value);

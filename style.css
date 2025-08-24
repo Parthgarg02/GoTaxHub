@@ -1609,6 +1609,139 @@ main {
     font-size: var(--font-size-2xl);
 }
 
+/* Enhanced Mission & Vision Styling */
+.mission-vision-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--space-32);
+    margin-bottom: var(--space-48);
+}
+
+.mission-vision-card {
+    background: linear-gradient(135deg, var(--color-surface), var(--color-bg-1));
+    border-radius: var(--radius-xl);
+    padding: var(--space-40);
+    border: 1px solid var(--color-card-border);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--duration-normal) var(--ease-standard);
+    box-shadow: var(--shadow-md);
+}
+
+.mission-vision-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-teal-400));
+}
+
+.mission-vision-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary);
+}
+
+.mission-card::before {
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.vision-card::before {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-16);
+    display: block;
+    text-align: center;
+}
+
+.mission-vision-card h2 {
+    color: var(--color-text);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    margin-bottom: var(--space-20);
+    position: relative;
+}
+
+.mission-vision-card h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 2px;
+}
+
+.mission-vision-card p {
+    color: var(--color-text);
+    line-height: 1.7;
+    font-size: var(--font-size-lg);
+    text-align: center;
+    margin-bottom: var(--space-24);
+}
+
+.mission-vision-card p strong {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.highlight-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    justify-content: center;
+    margin-top: var(--space-20);
+}
+
+.point {
+    background: var(--color-primary);
+    color: white;
+    padding: var(--space-6) var(--space-12);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.mission-card .point {
+    background: #3b82f6;
+}
+
+.vision-card .point {
+    background: #10b981;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .mission-vision-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-24);
+    }
+    
+    .mission-vision-card {
+        padding: var(--space-24);
+    }
+    
+    .card-icon {
+        font-size: 2.5rem;
+    }
+    
+    .highlight-points {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 .team-section {
     margin-bottom: var(--space-32);
     background: var(--color-bg-4);
@@ -2200,6 +2333,177 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: var(--space-24);
     margin-bottom: var(--space-32);
+}
+
+/* Enhanced Calculator Styles */
+.enhanced-calculator {
+    grid-column: 1 / -1; /* Take full width */
+    max-width: 1200px;
+    margin: 0 auto var(--space-32);
+}
+
+.enhanced-tool-form {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    border: 1px solid var(--color-card-border);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-20);
+    margin-bottom: var(--space-24);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+    max-width: 400px;
+}
+
+.form-group label {
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--space-8);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+}
+
+.form-group input,
+.form-group select {
+    padding: var(--space-12);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    transition: all var(--duration-fast) var(--ease-standard);
+    background: var(--color-background);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.income-section,
+.deduction-section {
+    background: var(--color-bg-1);
+    border-radius: var(--radius-md);
+    padding: var(--space-24);
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--color-card-border-inner);
+}
+
+.income-section h4,
+.deduction-section h4 {
+    color: var(--color-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-16);
+    text-align: center;
+}
+
+.calculator-actions {
+    display: flex;
+    gap: var(--space-16);
+    justify-content: center;
+    margin-bottom: var(--space-24);
+}
+
+.enhanced-tool-result {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    border: 1px solid var(--color-card-border);
+    margin-top: var(--space-24);
+    min-height: 50px;
+}
+
+.enhanced-tool-result.has-result {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.calculator-disclaimer {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: var(--radius-md);
+    padding: var(--space-16);
+    margin-top: var(--space-20);
+    color: #856404;
+}
+
+.calculator-disclaimer p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+}
+
+.tax-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-16);
+    margin-bottom: var(--space-20);
+}
+
+.tax-item {
+    background: var(--color-bg-1);
+    border-radius: var(--radius-md);
+    padding: var(--space-16);
+    text-align: center;
+    border: 1px solid var(--color-card-border-inner);
+}
+
+.tax-item h5 {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-8);
+    font-weight: var(--font-weight-medium);
+}
+
+.tax-item .amount {
+    color: var(--color-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.total-tax {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.total-tax h5 {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.total-tax .amount {
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .enhanced-tool-form {
+        padding: var(--space-20);
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-16);
+    }
+    
+    .calculator-actions {
+        flex-direction: column;
+    }
+    
+    .tax-breakdown {
+        grid-template-columns: 1fr;
+    }
 }
 
 .tool-card {

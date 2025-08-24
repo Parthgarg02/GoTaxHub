@@ -863,14 +863,28 @@
                 </div>
 
                 <div class="about-content">
-                    <div class="about-section">
-                        <h2>Our Mission</h2>
-                        <p>We are dedicated to delivering seamless compliance solutions and financial clarity, combining technology and expert insight to help organizations of all sizes thrive in a complex regulatory landscape.</p>
-                    </div>
+                    <div class="mission-vision-container">
+                        <div class="mission-vision-card mission-card">
+                            <div class="card-icon">🎯</div>
+                            <h2>Our Mission</h2>
+                            <p>We are dedicated to delivering <strong>seamless compliance solutions</strong> and <strong>financial clarity</strong>, combining cutting-edge technology and expert insight to help organizations of all sizes thrive in a complex regulatory landscape.</p>
+                            <div class="highlight-points">
+                                <span class="point">✓ Seamless Compliance</span>
+                                <span class="point">✓ Financial Clarity</span>
+                                <span class="point">✓ Expert Guidance</span>
+                            </div>
+                        </div>
 
-                    <div class="about-section">
-                        <h2>Our Vision</h2>
-                        <p>To empower businesses of all sizes with seamless financial clarity and regulatory confidence, fostering a world where compliance is effortless and growth is unhindered. We aim to become the most trusted partner for organisations, enabling them to thrive in an increasingly complex regulatory environment.</p>
+                        <div class="mission-vision-card vision-card">
+                            <div class="card-icon">🌟</div>
+                            <h2>Our Vision</h2>
+                            <p>To empower businesses of all sizes with <strong>seamless financial clarity</strong> and <strong>regulatory confidence</strong>, fostering a world where compliance is effortless and growth is unhindered. We aim to become the most trusted partner for organisations.</p>
+                            <div class="highlight-points">
+                                <span class="point">✓ Regulatory Confidence</span>
+                                <span class="point">✓ Effortless Compliance</span>
+                                <span class="point">✓ Trusted Partnership</span>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -1146,23 +1160,118 @@
                 </div>
 
                 <div class="tools-grid">
-                    <div class="tool-card">
+                    <div class="tool-card enhanced-calculator">
                         <div class="tool-icon">📄</div>
-                        <h3>ITR Calculator</h3>
-                        <p>Calculate your income tax liability for different financial years</p>
-                        <div class="tool-form">
-                            <input type="number" placeholder="Annual Income" id="itr-income">
-                            <select id="itr-year">
-                                <option value="2025-26">FY 2025-26</option>
-                                <option value="2024-25">FY 2024-25</option>
-                                <option value="2023-24">FY 2023-24</option>
-                            </select>
-                            <select id="tax-regime">
-                                <option value="new">New Tax Regime (Default)</option>
-                                <option value="old">Old Tax Regime</option>
-                            </select>
-                            <button onclick="calculateITR()" class="btn btn--primary btn--sm">Calculate</button>
-                            <div id="itr-result" class="tool-result"></div>
+                        <h3>Advanced ITR Calculator</h3>
+                        <p>Professional income tax liability calculator with detailed analysis</p>
+                        <div class="enhanced-tool-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="taxpayer-category">Taxpayer Category</label>
+                                    <select id="taxpayer-category">
+                                        <option value="individual">Individual</option>
+                                        <option value="huf">HUF</option>
+                                        <option value="company">Company</option>
+                                        <option value="firm">Firm/LLP</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="age-category">Age Category</label>
+                                    <select id="age-category">
+                                        <option value="below-60">Below 60 years</option>
+                                        <option value="60-80">Senior Citizen (60-80)</option>
+                                        <option value="above-80">Super Senior (Above 80)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="residential-status">Residential Status</label>
+                                    <select id="residential-status">
+                                        <option value="resident">Resident</option>
+                                        <option value="non-resident">Non-Resident</option>
+                                        <option value="rnor">RNOR</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="itr-year-enhanced">Assessment Year</label>
+                                    <select id="itr-year-enhanced">
+                                        <option value="2025-26">AY 2025-26</option>
+                                        <option value="2024-25">AY 2024-25</option>
+                                        <option value="2023-24">AY 2023-24</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label for="tax-regime-enhanced">Tax Regime</label>
+                                    <select id="tax-regime-enhanced">
+                                        <option value="new">New Tax Regime (Section 115BAC)</option>
+                                        <option value="old">Old Tax Regime</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="income-section">
+                                <h4>Income Details</h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="gross-salary">Gross Salary</label>
+                                        <input type="number" placeholder="₹0" id="gross-salary">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="house-property">House Property Income</label>
+                                        <input type="number" placeholder="₹0" id="house-property">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="business-income">Business/Professional Income</label>
+                                        <input type="number" placeholder="₹0" id="business-income">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="capital-gains">Capital Gains</label>
+                                        <input type="number" placeholder="₹0" id="capital-gains">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="other-sources">Other Sources</label>
+                                        <input type="number" placeholder="₹0" id="other-sources">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="deduction-section" id="deduction-section">
+                                <h4>Deductions (Old Tax Regime Only)</h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="section-80c">Section 80C</label>
+                                        <input type="number" placeholder="₹0" id="section-80c" max="150000">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="section-80d">Section 80D</label>
+                                        <input type="number" placeholder="₹0" id="section-80d">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="section-80g">Section 80G</label>
+                                        <input type="number" placeholder="₹0" id="section-80g">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="calculator-actions">
+                                <button onclick="calculateEnhancedITR()" class="btn btn--primary btn--lg">Calculate Tax</button>
+                                <button onclick="resetEnhancedCalculator()" class="btn btn--outline btn--lg">Reset</button>
+                            </div>
+                            
+                            <div id="enhanced-itr-result" class="enhanced-tool-result"></div>
+                            
+                            <div class="calculator-disclaimer">
+                                <p><strong>Disclaimer:</strong> This calculator provides approximate tax calculations. Actual tax liability may vary based on specific circumstances and latest amendments. Please consult our CA experts for accurate tax planning.</p>
+                            </div>
                         </div>
                     </div>
 
