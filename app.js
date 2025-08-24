@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initServiceCardInteractions();
     initTestimonialsSlider();
+    initServiceCategories();
 });
 
 // Navigation functionality
@@ -1507,4 +1508,79 @@ function resetGratuityCalculator() {
     document.getElementById('employee-type').selectedIndex = 0;
     document.getElementById('gratuity-result').innerHTML = '';
     document.getElementById('gratuity-result').className = 'enhanced-tool-result';
+}
+
+// Service Categories Expand/Collapse functionality
+function initServiceCategories() {
+    const serviceCategories = document.querySelectorAll('.service-category');
+    
+    serviceCategories.forEach(category => {
+        const header = category.querySelector('.service-category-header');
+        const details = category.querySelector('.service-details');
+        const expandIcon = category.querySelector('.expand-icon');
+        
+        if (header && details && expandIcon) {
+            header.style.cursor = 'pointer';
+            
+            header.addEventListener('click', function() {
+                const isExpanded = details.style.display === 'block';
+                
+                // Close all other service categories
+                serviceCategories.forEach(otherCategory => {
+                    if (otherCategory !== category) {
+                        const otherDetails = otherCategory.querySelector('.service-details');
+                        const otherIcon = otherCategory.querySelector('.expand-icon');
+                        if (otherDetails && otherIcon) {
+                            otherDetails.style.display = 'none';
+                            otherIcon.textContent = '▼';
+                            otherCategory.classList.remove('expanded');
+                        }
+                    }
+                });
+                
+                // Toggle current category
+                if (isExpanded) {
+                    details.style.display = 'none';
+                    expandIcon.textContent = '▼';
+                    category.classList.remove('expanded');
+                } else {
+                    details.style.display = 'block';
+                    expandIcon.textContent = '▲';
+                    category.classList.add('expanded');
+                    
+                    // Smooth scroll to the category header
+                    setTimeout(() => {
+                        header.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }, 100);
+                }
+            });
+        }
+    });
+    
+    // Handle keyboard accessibility
+    serviceCategories.forEach(category => {
+        const header = category.querySelector('.service-category-header');
+        if (header) {
+            header.setAttribute('tabindex', '0');
+            header.setAttribute('role', 'button');
+            header.setAttribute('aria-expanded', 'false');
+            
+            header.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                    
+                    // Update aria-expanded
+                    const details = category.querySelector('.service-details');
+                    if (details) {
+                        const isExpanded = details.style.display === 'block';
+                        header.setAttribute('aria-expanded', isExpanded);
+                    }
+                }
+            });
+        }
+    });
 }

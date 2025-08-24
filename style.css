@@ -1331,6 +1331,136 @@ main {
     background: var(--color-secondary-hover);
 }
 
+/* Service Category Styles */
+.service-categories {
+    margin-top: var(--space-32);
+}
+
+.service-category {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--color-card-border);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.service-category:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.service-category.expanded {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.service-category-header {
+    padding: var(--space-24);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-20);
+    transition: background-color 0.3s ease;
+}
+
+.service-category-header:hover {
+    background: var(--color-bg-1);
+}
+
+.service-category-header h2 {
+    margin: 0 0 var(--space-12) 0;
+    color: var(--color-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.service-category-header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+.expand-icon {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-top: var(--space-4);
+}
+
+.service-category.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+.service-details {
+    padding: 0 var(--space-24) var(--space-24);
+    border-top: 1px solid var(--color-card-border);
+    background: var(--color-background);
+}
+
+.consult-expert-section {
+    margin-top: var(--space-32);
+    padding-top: var(--space-24);
+    border-top: 1px solid var(--color-card-border);
+    text-align: center;
+}
+
+.consult-ca-btn {
+    background: var(--color-accent);
+    color: var(--color-white);
+    border: none;
+    padding: var(--space-16) var(--space-32);
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consult-ca-btn:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(var(--color-accent-rgb), 0.3);
+}
+
+/* Mobile responsive styles for service categories */
+@media (max-width: 768px) {
+    .service-category-header {
+        padding: var(--space-20);
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .service-category-header h2 {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-8);
+    }
+    
+    .expand-icon {
+        position: absolute;
+        right: var(--space-20);
+        top: var(--space-20);
+    }
+    
+    .service-details {
+        padding: 0 var(--space-20) var(--space-20);
+    }
+    
+    .service-detail-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-16);
+    }
+    
+    .consult-ca-btn {
+        width: 100%;
+        padding: var(--space-16);
+    }
+}
+
 /* Pricing Preview */
 .pricing-preview {
     padding: var(--space-32) 0;
