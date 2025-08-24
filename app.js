@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initServiceCardInteractions();
     initTestimonialsSlider();
     initServiceCategories();
+    initPlanSelection();
 });
 
 // Navigation functionality
@@ -336,32 +337,13 @@ function initSmoothScrolling() {
     const choosePlanButtons = document.querySelectorAll('.pricing-plan .btn');
     choosePlanButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get the plan name
+            // Don't prevent default - let the link work normally
+            // Just store the plan name in sessionStorage for the contact page
             const planName = this.closest('.pricing-plan').querySelector('h3').textContent;
+            sessionStorage.setItem('selectedPlan', planName);
             
-            // Navigate to contact page
-            navigateToPage('contact');
-            
-            // Pre-fill the service field after navigation
-            setTimeout(() => {
-                const serviceSelect = document.getElementById('service');
-                if (serviceSelect) {
-                    // Create a custom option for the selected plan
-                    let option = serviceSelect.querySelector(`option[value="${planName.toLowerCase().replace(/\s+/g, '-')}"]`);
-                    if (!option) {
-                        option = document.createElement('option');
-                        option.value = planName.toLowerCase().replace(/\s+/g, '-');
-                        option.textContent = `ITR Filing - ${planName}`;
-                        serviceSelect.appendChild(option);
-                    }
-                    serviceSelect.value = option.value;
-                }
-                
-                // Show a notification
-                showNotification(`Selected plan: ${planName}. Please fill in your details below.`, 'info');
-            }, 500);
+            // Let the browser handle the navigation to contact.html
+            // The contact page can check sessionStorage for the selected plan
         });
     });
 }
@@ -1583,4 +1565,43 @@ function initServiceCategories() {
             });
         }
     });
+}
+
+// Plan Selection functionality
+function initPlanSelection() {
+    // Check if we're on the contact page and if there's a selected plan
+    const serviceSelect = document.getElementById('service');
+    if (serviceSelect && sessionStorage.getItem('selectedPlan')) {
+        const selectedPlan = sessionStorage.getItem('selectedPlan');
+        
+        // Map plan names to service options
+        const planToService = {
+            'Salary + 1 House Property': 'itr-filing',
+            'Salary + Multiple Properties': 'itr-filing',
+            'Business & Professional': 'itr-filing',
+            'Capital Gains': 'itr-filing',
+            'F&O Trading': 'itr-filing',
+            'Crypto Currency': 'itr-filing',
+            'NRI Income': 'itr-filing',
+            'Foreign Income': 'itr-filing'
+        };
+        
+        // Set the service select to the appropriate option
+        const serviceValue = planToService[selectedPlan] || 'itr-filing';
+        serviceSelect.value = serviceValue;
+        
+        // Pre-fill the message with the selected plan
+        const messageTextarea = document.getElementById('message');
+        if (messageTextarea && !messageTextarea.value) {
+            messageTextarea.value = `Hi, I'm interested in the "${selectedPlan}" plan. Please provide more details and guide me through the process.`;
+        }
+        
+        // Show a notification
+        if (typeof showNotification === 'function') {
+            showNotification(`Selected plan: ${selectedPlan}. Please fill in your details below.`, 'info');
+        }
+        
+        // Clear the stored plan after using it
+        sessionStorage.removeItem('selectedPlan');
+    }
 }
