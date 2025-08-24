@@ -1106,7 +1106,7 @@ main {
 .testimonials-track {
     display: flex;
     transition: transform 0.5s ease;
-    width: calc(100% * 8);
+    width: calc(100% * 2); /* 2 slides total: 8 testimonials / 4 per view */
 }
 
 .testimonial {
@@ -1114,7 +1114,7 @@ main {
     border-radius: var(--radius-lg);
     padding: var(--space-24);
     border: 1px solid var(--color-card-border);
-    min-width: calc(25% - var(--space-18));
+    width: calc(50% / 2 - var(--space-18)); /* 4 testimonials per slide across 2 slides = 50% of total width / 2 */
     margin-right: var(--space-24);
     flex-shrink: 0;
 }

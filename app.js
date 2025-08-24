@@ -1094,6 +1094,8 @@ function compareRegimes() {
 // Testimonials Slider functionality
 let currentTestimonialSlide = 0;
 const totalTestimonials = 8;
+const testimonialsPerView = 4; // Show 4 testimonials at once
+const totalSlides = Math.ceil(totalTestimonials / testimonialsPerView); // 2 slides total (8 testimonials / 4 per view)
 let testimonialSlideInterval;
 
 function initTestimonialsSlider() {
@@ -1112,21 +1114,13 @@ function stopAutoSlide() {
 }
 
 function nextSlide() {
-    if (currentTestimonialSlide < totalTestimonials - 4) {
-        currentTestimonialSlide++;
-    } else {
-        currentTestimonialSlide = 0;
-    }
+    currentTestimonialSlide = (currentTestimonialSlide + 1) % totalSlides;
     updateSlider();
 }
 
 function previousSlide() {
     stopAutoSlide();
-    if (currentTestimonialSlide > 0) {
-        currentTestimonialSlide--;
-    } else {
-        currentTestimonialSlide = totalTestimonials - 4;
-    }
+    currentTestimonialSlide = (currentTestimonialSlide - 1 + totalSlides) % totalSlides;
     updateSlider();
     setTimeout(startAutoSlide, 2000); // Restart auto-slide after 2 seconds
 }
@@ -1143,14 +1137,15 @@ function updateSlider() {
     const dots = document.querySelectorAll('.dot');
     
     if (track) {
-        const offset = -(currentTestimonialSlide * 25); // 25% per slide (showing 4 at a time)
+        // Move by 100% for each slide since we're showing 4 testimonials at once
+        const offset = -(currentTestimonialSlide * 100);
         track.style.transform = `translateX(${offset}%)`;
     }
     
-    // Update dots
+    // Update dots - only show dots for the number of slides (2 dots for 2 slides)
     dots.forEach((dot, index) => {
         dot.classList.remove('active');
-        if (index === Math.floor(currentTestimonialSlide / 1)) {
+        if (index === currentTestimonialSlide) {
             dot.classList.add('active');
         }
     });
