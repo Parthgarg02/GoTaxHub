@@ -1530,3 +1530,20 @@ function showPayrollServices() {
 function showPANTANServices() {
     showServiceDetail('pantan-details');
 }
+
+// Reset functions for dedicated calculator pages
+function resetTDSCalculator() {
+    document.getElementById('tds-income').value = '';
+    document.getElementById('tds-frequency').selectedIndex = 0;
+    document.getElementById('tds-type').selectedIndex = 0;
+    document.getElementById('tds-result').innerHTML = '';
+    document.getElementById('tds-result').className = 'enhanced-tool-result';
+}
+
+function resetGratuityCalculator() {
+    document.getElementById('gratuity-salary').value = '';
+    document.getElementById('gratuity-years').value = '';
+    document.getElementById('employee-type').selectedIndex = 0;
+    document.getElementById('gratuity-result').innerHTML = '';
+    document.getElementById('gratuity-result').className = 'enhanced-tool-result';
+}

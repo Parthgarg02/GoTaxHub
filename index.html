@@ -24,10 +24,10 @@
                 <li class="nav__dropdown">
                     <a href="#tools" class="nav__link dropdown-toggle">Tools</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#tools">Tax Calculators</a></li>
-                        <li><a href="#tools">ITR Calculator</a></li>
-                        <li><a href="#tools">TDS Calculator</a></li>
-                        <li><a href="#tools">Gratuity Calculator</a></li>
+                        <li><a href="income-tax-calculator.html">Income Tax Calculator</a></li>
+                        <li><a href="tds-calculator.html">TDS Calculator</a></li>
+                        <li><a href="gratuity-calculator.html">Gratuity Calculator</a></li>
+                        <li><a href="#tools">More Tools</a></li>
                     </ul>
                 </li>
                 <li class="nav__dropdown">
@@ -1160,119 +1160,16 @@
                 </div>
 
                 <div class="tools-grid">
-                    <div class="tool-card enhanced-calculator">
+                    <div class="tool-card">
                         <div class="tool-icon">📄</div>
-                        <h3>Advanced ITR Calculator</h3>
-                        <p>Professional income tax liability calculator with detailed analysis</p>
-                        <div class="enhanced-tool-form">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="taxpayer-category">Taxpayer Category</label>
-                                    <select id="taxpayer-category">
-                                        <option value="individual">Individual</option>
-                                        <option value="huf">HUF</option>
-                                        <option value="company">Company</option>
-                                        <option value="firm">Firm/LLP</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="age-category">Age Category</label>
-                                    <select id="age-category">
-                                        <option value="below-60">Below 60 years</option>
-                                        <option value="60-80">Senior Citizen (60-80)</option>
-                                        <option value="above-80">Super Senior (Above 80)</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="residential-status">Residential Status</label>
-                                    <select id="residential-status">
-                                        <option value="resident">Resident</option>
-                                        <option value="non-resident">Non-Resident</option>
-                                        <option value="rnor">RNOR</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="itr-year-enhanced">Assessment Year</label>
-                                    <select id="itr-year-enhanced">
-                                        <option value="2025-26">AY 2025-26</option>
-                                        <option value="2024-25">AY 2024-25</option>
-                                        <option value="2023-24">AY 2023-24</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group full-width">
-                                    <label for="tax-regime-enhanced">Tax Regime</label>
-                                    <select id="tax-regime-enhanced">
-                                        <option value="new">New Tax Regime (Section 115BAC)</option>
-                                        <option value="old">Old Tax Regime</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="income-section">
-                                <h4>Income Details</h4>
-                                <div class="form-grid">
-                                    <div class="form-group">
-                                        <label for="gross-salary">Gross Salary</label>
-                                        <input type="number" placeholder="₹0" id="gross-salary">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="house-property">House Property Income</label>
-                                        <input type="number" placeholder="₹0" id="house-property">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="business-income">Business/Professional Income</label>
-                                        <input type="number" placeholder="₹0" id="business-income">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="capital-gains">Capital Gains</label>
-                                        <input type="number" placeholder="₹0" id="capital-gains">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="other-sources">Other Sources</label>
-                                        <input type="number" placeholder="₹0" id="other-sources">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="deduction-section" id="deduction-section">
-                                <h4>Deductions (Old Tax Regime Only)</h4>
-                                <div class="form-grid">
-                                    <div class="form-group">
-                                        <label for="section-80c">Section 80C</label>
-                                        <input type="number" placeholder="₹0" id="section-80c" max="150000">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="section-80d">Section 80D</label>
-                                        <input type="number" placeholder="₹0" id="section-80d">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="section-80g">Section 80G</label>
-                                        <input type="number" placeholder="₹0" id="section-80g">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="calculator-actions">
-                                <button onclick="calculateEnhancedITR()" class="btn btn--primary btn--lg">Calculate Tax</button>
-                                <button onclick="resetEnhancedCalculator()" class="btn btn--outline btn--lg">Reset</button>
-                            </div>
-                            
-                            <div id="enhanced-itr-result" class="enhanced-tool-result"></div>
-                            
-                            <div class="calculator-disclaimer">
-                                <p><strong>Disclaimer:</strong> This calculator provides approximate tax calculations. Actual tax liability may vary based on specific circumstances and latest amendments. Please consult our CA experts for accurate tax planning.</p>
-                            </div>
+                        <h3>Income Tax Calculator</h3>
+                        <p>Professional income tax liability calculator with detailed analysis for all taxpayer categories</p>
+                        <div class="tool-features">
+                            <span class="feature">✓ All Taxpayer Categories</span>
+                            <span class="feature">✓ Both Tax Regimes</span>
+                            <span class="feature">✓ Latest Tax Slabs</span>
                         </div>
+                        <a href="income-tax-calculator.html" class="btn btn--primary btn--full-width">Open Calculator</a>
                     </div>
 
                     <div class="tool-card">
@@ -1299,41 +1196,25 @@
                     <div class="tool-card">
                         <div class="tool-icon">💰</div>
                         <h3>Gratuity Calculator</h3>
-                        <p>Calculate gratuity amount based on salary and years of service</p>
-                        <div class="tool-form">
-                            <input type="number" placeholder="Last Drawn Salary (Basic + DA)" id="gratuity-salary">
-                            <input type="number" placeholder="Years of Service" id="gratuity-years">
-                            <select id="employee-type">
-                                <option value="private">Private Sector</option>
-                                <option value="government">Government Employee</option>
-                            </select>
-                            <button onclick="calculateGratuity()" class="btn btn--primary btn--sm">Calculate</button>
-                            <div id="gratuity-result" class="tool-result"></div>
+                        <p>Calculate gratuity amount and tax implications for government and private employees</p>
+                        <div class="tool-features">
+                            <span class="feature">✓ Both Sectors</span>
+                            <span class="feature">✓ Tax Exemption Rules</span>
+                            <span class="feature">✓ Updated ₹25 Lakh Limit</span>
                         </div>
+                        <a href="gratuity-calculator.html" class="btn btn--primary btn--full-width">Open Calculator</a>
                     </div>
 
                     <div class="tool-card">
                         <div class="tool-icon">📊</div>
                         <h3>TDS Calculator</h3>
-                        <p>Calculate TDS on salary, interest, and other income sources</p>
-                        <div class="tool-form">
-                            <input type="number" placeholder="Income Amount" id="tds-income">
-                            <select id="tds-frequency">
-                                <option value="annual">Annual Income</option>
-                                <option value="monthly">Monthly Income</option>
-                            </select>
-                            <select id="tds-type">
-                                <option value="salary">Salary</option>
-                                <option value="interest">Interest</option>
-                                <option value="professional">Professional Fees</option>
-                                <option value="rent">Rent</option>
-                                <option value="commission">Commission/Brokerage</option>
-                                <option value="contractor">Contractor Payment</option>
-                                <option value="dividend">Dividend</option>
-                            </select>
-                            <button onclick="calculateTDS()" class="btn btn--primary btn--sm">Calculate</button>
-                            <div id="tds-result" class="tool-result"></div>
+                        <p>Calculate TDS on salary, interest, rent, and professional payments with latest rates</p>
+                        <div class="tool-features">
+                            <span class="feature">✓ All TDS Sections</span>
+                            <span class="feature">✓ Latest Rates 2024</span>
+                            <span class="feature">✓ Professional Grade</span>
                         </div>
+                        <a href="tds-calculator.html" class="btn btn--primary btn--full-width">Open Calculator</a>
                     </div>
 
                     <div class="tool-card">

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDS Calculator - GoTaxHub</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="nav__brand">
+                <a href="index.html" class="nav__logo-link">
+                    <img src="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png" alt="GoTaxHub" class="nav__logo-img">
+                </a>
+            </div>
+            <ul class="nav__menu" id="nav-menu">
+                <li><a href="index.html#home" class="nav__link">Home</a></li>
+                <li><a href="index.html#about" class="nav__link">About Us</a></li>
+                <li class="nav__dropdown">
+                    <a href="index.html#tools" class="nav__link dropdown-toggle">Tools</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="income-tax-calculator.html">Income Tax Calculator</a></li>
+                        <li><a href="tds-calculator.html">TDS Calculator</a></li>
+                        <li><a href="gratuity-calculator.html">Gratuity Calculator</a></li>
+                    </ul>
+                </li>
+                <li class="nav__dropdown">
+                    <a href="index.html#services" class="nav__link dropdown-toggle">Services</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html#services">ITR Filing</a></li>
+                        <li><a href="index.html#services">GST Services</a></li>
+                        <li><a href="index.html#services">Tax Planning</a></li>
+                        <li><a href="index.html#services">Business Advisory</a></li>
+                    </ul>
+                </li>
+                <li class="nav__dropdown">
+                    <a href="index.html#pricing" class="nav__link dropdown-toggle">Pricing</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html#pricing">Salary Plans</a></li>
+                        <li><a href="index.html#pricing">Business Plans</a></li>
+                        <li><a href="index.html#pricing">Capital Gains</a></li>
+                        <li><a href="index.html#pricing">NRI Services</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#contact" class="nav__link">Contact Us</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="index.html#pricing" class="btn btn--outline btn--sm">File ITR Now</a>
+                <a href="index.html#contact" class="btn btn--primary btn--sm">Get Expert Help</a>
+            </div>
+            <div class="nav__toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="calculator-main">
+        <!-- Page Header -->
+        <section class="calculator-hero">
+            <div class="container">
+                <div class="calculator-hero-content">
+                    <div class="breadcrumb">
+                        <a href="index.html">Home</a> 
+                        <span>›</span> 
+                        <a href="index.html#tools">Tools</a> 
+                        <span>›</span> 
+                        <span>TDS Calculator</span>
+                    </div>
+                    <h1 class="calculator-title">Professional TDS Calculator</h1>
+                    <p class="calculator-subtitle">Calculate TDS on salary, interest, rent, and professional payments with latest rates</p>
+                    <div class="calculator-features">
+                        <span class="feature-badge">✓ Latest TDS Rates</span>
+                        <span class="feature-badge">✓ All Sections</span>
+                        <span class="feature-badge">✓ Updated 2024</span>
+                        <span class="feature-badge">✓ Professional Grade</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section class="calculator-section">
+            <div class="container">
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h2>TDS Calculator</h2>
+                            <p>Calculate Tax Deducted at Source for various income types</p>
+                        </div>
+
+                        <div class="enhanced-tool-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="tds-income">Income Amount</label>
+                                    <input type="number" placeholder="₹0" id="tds-income">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="tds-frequency">Income Frequency</label>
+                                    <select id="tds-frequency">
+                                        <option value="annual">Annual Income</option>
+                                        <option value="monthly">Monthly Income</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label for="tds-type">TDS Type/Section</label>
+                                    <select id="tds-type">
+                                        <option value="salary">Salary (Section 192)</option>
+                                        <option value="interest">Interest (Section 194A)</option>
+                                        <option value="professional">Professional Fees (Section 194J)</option>
+                                        <option value="rent">Rent (Section 194IB)</option>
+                                        <option value="commission">Commission/Brokerage (Section 194H)</option>
+                                        <option value="contractor">Contractor Payment (Section 194C)</option>
+                                        <option value="dividend">Dividend (Section 194)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="calculator-actions">
+                                <button onclick="calculateTDS()" class="btn btn--primary btn--lg">Calculate TDS</button>
+                                <button onclick="resetTDSCalculator()" class="btn btn--outline btn--lg">Reset</button>
+                            </div>
+                            
+                            <div id="tds-result" class="enhanced-tool-result"></div>
+                            
+                            <div class="calculator-disclaimer">
+                                <p><strong>Disclaimer:</strong> TDS rates are updated as per Finance Act 2024. Actual TDS may vary based on specific circumstances. Higher rates apply if PAN is not provided. Consult our CA experts for complex cases.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TDS Information Sidebar -->
+                    <div class="tax-info-sidebar">
+                        <div class="info-card">
+                            <h3>📊 TDS Rates 2024-25</h3>
+                            <div class="tax-slabs">
+                                <div class="slab">
+                                    <span class="range">Salary (192)</span>
+                                    <span class="rate">As per tax slabs</span>
+                                </div>
+                                <div class="slab">
+                                    <span class="range">Interest (194A)</span>
+                                    <span class="rate">10%</span>
+                                </div>
+                                <div class="slab">
+                                    <span class="range">Professional (194J)</span>
+                                    <span class="rate">10%</span>
+                                </div>
+                                <div class="slab">
+                                    <span class="range">Rent (194IB)</span>
+                                    <span class="rate">2%</span>
+                                </div>
+                                <div class="slab">
+                                    <span class="range">Commission (194H)</span>
+                                    <span class="rate">2%</span>
+                                </div>
+                                <div class="slab">
+                                    <span class="range">Contractor (194C)</span>
+                                    <span class="rate">1-2%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>💡 TDS Guidelines</h3>
+                            <ul class="tips-list">
+                                <li>TDS rates updated effective October 1, 2024</li>
+                                <li>20% rate if PAN not provided (Section 206AA)</li>
+                                <li>Different thresholds for different sections</li>
+                                <li>Senior citizens have higher exemption limits</li>
+                                <li>TDS must be deposited by 7th of next month</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card cta-card">
+                            <h3>Need TDS Compliance?</h3>
+                            <p>Get expert assistance for TDS returns, compliance, and notice handling</p>
+                            <a href="index.html#contact" class="btn btn--primary btn--full-width">Get TDS Support</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GoTaxHub</h3>
+                    <p>Expert CA services for your tax and business needs. Trusted by 10,000+ clients across india.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#pricing">Pricing</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="index.html#services">ITR Filing (All Forms)</a></li>
+                        <li><a href="index.html#services">GST Registration & Compliance</a></li>
+                        <li><a href="index.html#services">TDS & TCS Services</a></li>
+                        <li><a href="index.html#services">Tax Planning & Advisory</a></li>
+                        <li><a href="index.html#services">Audit & Assurance</a></li>
+                        <li><a href="index.html#services">NRI Tax Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li>📧 info@gotaxhub.com</li>
+                        <li>📞 +91-7905208874, +91-9140830544</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GoTaxHub. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
