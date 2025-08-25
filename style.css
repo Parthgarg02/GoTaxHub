@@ -1090,11 +1090,22 @@ main {
     background: var(--color-surface);
 }
 
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-24);
-    margin-top: var(--space-32);
+.testimonials-stats {
+    text-align: center;
+    margin-top: var(--space-16);
+    margin-bottom: var(--space-32);
+}
+
+.testimonials-stats__text {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-8);
+}
+
+.testimonials-stats__rating {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
+    font-weight: 600;
 }
 
 .testimonials-slider {
@@ -1106,40 +1117,44 @@ main {
 .testimonials-track {
     display: flex;
     transition: transform 0.5s ease;
-    width: calc(100% * 2); /* 2 slides total: 8 testimonials / 4 per view */
-    gap: var(--space-20);
+    width: calc(100% * 2);
+}
+
+.testimonials-slide {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-32);
+    width: 50%;
+    flex-shrink: 0;
 }
 
 .testimonial {
     background: var(--color-background);
     border-radius: var(--radius-lg);
-    padding: var(--space-20);
+    padding: var(--space-24);
     border: 1px solid var(--color-card-border);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: calc(50% / 2 - var(--space-15)); /* 4 testimonials per slide across 2 slides */
-    min-height: 320px; /* Portrait orientation - taller cards */
-    max-height: 380px; /* Maximum height to maintain consistency */
-    overflow: hidden;
-    flex-shrink: 0;
+    min-height: 160px;
 }
 
 .testimonial__rating {
-    margin-bottom: var(--space-12);
+    margin-bottom: var(--space-16);
+    font-size: var(--font-size-md);
+}
+
+.testimonial__author-name {
     font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-12);
 }
 
 .testimonial__text {
     color: var(--color-text);
-    margin-bottom: var(--space-16);
-    font-style: italic;
     line-height: var(--line-height-normal);
+    font-size: var(--font-size-base);
     flex-grow: 1;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 6; /* Limit to 6 lines for portrait layout */
-    -webkit-box-orient: vertical;
 }
 
 .testimonial__author {
@@ -2449,18 +2464,19 @@ main {
     }
 
     /* Mobile testimonials adjustments */
+    .testimonials-slide {
+        grid-template-columns: 1fr;
+        gap: var(--space-20);
+    }
+
     .testimonial {
-        min-height: 280px;
-        max-height: 320px;
-        width: calc(100% - var(--space-16));
+        min-height: 140px;
+        padding: var(--space-20);
     }
 
-    .testimonials-track {
-        width: calc(100% * 8); /* Show 1 testimonial per slide on mobile */
-    }
-
-    .testimonial__text {
-        -webkit-line-clamp: 4; /* Reduce lines on mobile */
+    .testimonials-stats__text,
+    .testimonials-stats__rating {
+        font-size: var(--font-size-base);
     }
 }
 

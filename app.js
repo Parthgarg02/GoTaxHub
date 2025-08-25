@@ -1351,35 +1351,17 @@ function compareRegimes() {
 
 // Testimonials Slider functionality
 let currentTestimonialSlide = 0;
-const totalTestimonials = 8;
-let testimonialsPerView = 4; // Show 4 testimonials at once on desktop
-let totalSlides = Math.ceil(totalTestimonials / testimonialsPerView);
+const totalSlides = 2; // We have 2 slides now
 let testimonialSlideInterval;
 
 function initTestimonialsSlider() {
-    updateResponsiveSettings();
     startAutoSlide();
     updateSlider();
     
     // Handle window resize
     window.addEventListener('resize', () => {
-        updateResponsiveSettings();
         updateSlider();
     });
-}
-
-function updateResponsiveSettings() {
-    if (window.innerWidth <= 768) {
-        testimonialsPerView = 1; // Show 1 testimonial on mobile
-    } else {
-        testimonialsPerView = 4; // Show 4 testimonials on desktop
-    }
-    totalSlides = Math.ceil(totalTestimonials / testimonialsPerView);
-    
-    // Reset slide if current slide is out of bounds
-    if (currentTestimonialSlide >= totalSlides) {
-        currentTestimonialSlide = 0;
-    }
 }
 
 function startAutoSlide() {
@@ -1416,30 +1398,16 @@ function updateSlider() {
     const dots = document.querySelectorAll('.dot');
     
     if (track) {
-        let offset;
-        if (window.innerWidth <= 768) {
-            // Mobile: move by (100% / total testimonials) for each testimonial
-            offset = -(currentTestimonialSlide * (100 / totalTestimonials));
-        } else {
-            // Desktop: move by 100% for each slide (showing 4 at once)
-            offset = -(currentTestimonialSlide * 100);
-        }
+        // Move by 50% for each slide (since each slide is 50% width)
+        const offset = -(currentTestimonialSlide * 50);
         track.style.transform = `translateX(${offset}%)`;
     }
     
     // Update dots
     dots.forEach((dot, index) => {
         dot.classList.remove('active');
-        if (window.innerWidth <= 768) {
-            // Mobile: show active dot based on current testimonial group
-            if (index === Math.floor(currentTestimonialSlide / 4)) {
-                dot.classList.add('active');
-            }
-        } else {
-            // Desktop: show active dot based on current slide
-            if (index === currentTestimonialSlide) {
-                dot.classList.add('active');
-            }
+        if (index === currentTestimonialSlide) {
+            dot.classList.add('active');
         }
     });
 }
