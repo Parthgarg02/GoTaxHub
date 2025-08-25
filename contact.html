@@ -8,7 +8,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
     <link rel="apple-touch-icon" sizes="180x180" href="GoTaxHub__3_-removebg-preview_PhotoGrid-removebg-preview.png">
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -85,7 +84,7 @@
                 <div class="contact-content">
                     <div class="contact-form-section">
                         <h2>Send us a Message</h2>
-                        <form class="contact-form" id="contact-form">
+                        <form class="contact-form" id="contact-form" method="POST" netlify>
                             <div class="form-group">
                                 <label for="name" class="form-label">Full Name *</label>
                                 <input type="text" id="name" name="name" class="form-control" required>

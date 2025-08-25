@@ -231,9 +231,6 @@ function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     
     if (contactForm) {
-        // Initialize EmailJS
-        emailjs.init('YOUR_PUBLIC_KEY'); // You need to replace this with your EmailJS public key
-        
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -267,51 +264,31 @@ function initContactForm() {
                 return;
             }
             
+            // Simulate form submission
             const submitButton = this.querySelector('button[type="submit"]');
             const originalText = submitButton.textContent;
             
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
             
-            // Prepare email parameters for EmailJS
-            const templateParams = {
-                from_name: name,
-                from_email: email,
-                phone: phone,
-                service: service || 'Not specified',
-                message: message || 'No message provided',
-                to_email: 'info@gotaxhub.com'
-            };
-            
-            // Send email using EmailJS
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-                .then(function(response) {
-                    console.log('Email sent successfully:', response);
-                    showNotification('Thank you for your message! Our team will contact you within 24 hours.', 'success');
-                    contactForm.reset();
-                })
-                .catch(function(error) {
-                    console.error('EmailJS error:', error);
-                    
-                    // Fallback to mailto if EmailJS fails
-                    const subject = encodeURIComponent(`Contact Form Submission from ${name}`);
-                    const body = encodeURIComponent(
-                        `Name: ${name}\n` +
-                        `Email: ${email}\n` +
-                        `Phone: ${phone}\n` +
-                        `Service: ${service || 'Not specified'}\n` +
-                        `Message: ${message || 'No message provided'}`
-                    );
-                    
-                    const mailtoLink = `mailto:info@gotaxhub.com?subject=${subject}&body=${body}`;
-                    window.location.href = mailtoLink;
-                    
-                    showNotification('Please complete the email submission in your email client.', 'info');
-                })
-                .finally(function() {
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                });
+            // Submit form using fetch API for proper server-side processing
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(new FormData(this)).toString()
+            })
+            .then(() => {
+                showNotification('Thank you for your message! Our team will contact you within 24 hours.', 'success');
+                this.reset();
+            })
+            .catch((error) => {
+                console.error('Form submission error:', error);
+                showNotification('Sorry, there was an error sending your message. Please try again or contact us directly at info@gotaxhub.com.', 'error');
+            })
+            .finally(() => {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            });
         });
     }
 }
