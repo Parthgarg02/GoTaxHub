@@ -47,6 +47,37 @@ function initNavigation() {
     });
 }
 
+// Navigate to page function
+function navigateToPage(targetId) {
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+        // If target exists on current page, scroll to it
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        // If target doesn't exist, try to navigate to the appropriate page
+        switch(targetId) {
+            case 'pricing':
+                window.location.href = 'pricing.html';
+                break;
+            case 'contact':
+                window.location.href = 'contact.html';
+                break;
+            case 'services':
+                window.location.href = 'services.html';
+                break;
+            case 'about':
+                window.location.href = 'about.html';
+                break;
+            case 'tools':
+                window.location.href = 'tools.html';
+                break;
+            default:
+                // For any other target, stay on current page or redirect to home
+                console.log('Unknown target:', targetId);
+                break;
+        }
+    }
+}
 
 // Mobile menu functionality
 function initMobileMenu() {
@@ -281,13 +312,13 @@ function initSmoothScrolling() {
     const heroButtons = document.querySelectorAll('.hero__cta .btn');
     heroButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
             const href = this.getAttribute('href');
             if (href && href.startsWith('#')) {
+                e.preventDefault();
                 const targetId = href.substring(1);
                 navigateToPage(targetId);
             }
+            // Let normal links (like to other pages) work without preventDefault
         });
     });
     
@@ -295,13 +326,13 @@ function initSmoothScrolling() {
     const headerButtons = document.querySelectorAll('.nav__cta .btn');
     headerButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
             const href = this.getAttribute('href');
             if (href && href.startsWith('#')) {
+                e.preventDefault();
                 const targetId = href.substring(1);
                 navigateToPage(targetId);
             }
+            // Let normal links (like to other pages) work without preventDefault
         });
     });
     
@@ -309,13 +340,13 @@ function initSmoothScrolling() {
     const serviceLinks = document.querySelectorAll('.service-card__link');
     serviceLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
             const href = this.getAttribute('href');
             if (href && href.startsWith('#')) {
+                e.preventDefault();
                 const targetId = href.substring(1);
                 navigateToPage(targetId);
             }
+            // Let normal links (like to other pages) work without preventDefault
         });
     });
     
@@ -323,13 +354,13 @@ function initSmoothScrolling() {
     const pricingButtons = document.querySelectorAll('.pricing-cta .btn, .pricing-preview .btn');
     pricingButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
             const href = this.getAttribute('href');
             if (href && href.startsWith('#')) {
+                e.preventDefault();
                 const targetId = href.substring(1);
                 navigateToPage(targetId);
             }
+            // Let normal links (like to other pages) work without preventDefault
         });
     });
     
