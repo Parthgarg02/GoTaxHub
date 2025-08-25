@@ -337,13 +337,16 @@ function initSmoothScrolling() {
     const choosePlanButtons = document.querySelectorAll('.pricing-plan .btn');
     choosePlanButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            // Don't prevent default - let the link work normally
-            // Just store the plan name in sessionStorage for the contact page
+            // Store the plan name in sessionStorage for the contact page
             const planName = this.closest('.pricing-plan').querySelector('h3').textContent;
             sessionStorage.setItem('selectedPlan', planName);
             
-            // Let the browser handle the navigation to contact.html
-            // The contact page can check sessionStorage for the selected plan
+            // Ensure navigation happens correctly
+            const href = this.getAttribute('href');
+            if (href && href === 'contact.html') {
+                // Force navigation to contact page
+                window.location.href = href;
+            }
         });
     });
 }
