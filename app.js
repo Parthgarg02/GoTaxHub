@@ -397,7 +397,7 @@ function initServiceCardInteractions() {
             }
             
             // Navigate to services page
-            navigateToPage('services');
+            window.location.href = 'services.html';
             
             // Get service name from card title
             const serviceName = this.querySelector('.service-card__title').textContent;
