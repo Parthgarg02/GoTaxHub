@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initTestimonialsSlider();
     initServiceCategories();
     initPlanSelection();
+    initIncomeTaxCalculator();
 });
 
 // Navigation functionality
@@ -1612,5 +1613,113 @@ function initPlanSelection() {
         
         // Clear the stored plan after using it
         sessionStorage.removeItem('selectedPlan');
+    }
+}
+
+// Initialize Income Tax Calculator
+function initIncomeTaxCalculator() {
+    const ayDropdown = document.getElementById('itr-year-enhanced');
+    if (ayDropdown) {
+        // Update tax slabs on page load
+        updateTaxSlabsDisplay(ayDropdown.value);
+        
+        // Add event listener for assessment year changes
+        ayDropdown.addEventListener('change', function() {
+            updateTaxSlabsDisplay(this.value);
+        });
+    }
+}
+
+// Update tax slabs display based on selected assessment year
+function updateTaxSlabsDisplay(assessmentYear) {
+    const slabsTitle = document.getElementById('tax-slabs-title');
+    const slabsContainer = document.getElementById('tax-slabs-container');
+    const tipsTitle = document.getElementById('tax-tips-title');
+    const tipsList = document.getElementById('tax-tips-list');
+    
+    if (!slabsTitle || !slabsContainer || !tipsTitle || !tipsList) return;
+    
+    if (assessmentYear === '2026-27') {
+        // AY 2026-27 slabs (Budget 2025)
+        slabsTitle.innerHTML = '📊 Tax Slabs AY 2026-27 (New Regime)';
+        slabsContainer.innerHTML = `
+            <div class="slab">
+                <span class="range">Up to ₹4,00,000</span>
+                <span class="rate">0%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹4,00,000 - ₹8,00,000</span>
+                <span class="rate">5%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹8,00,000 - ₹12,00,000</span>
+                <span class="rate">10%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹12,00,000 - ₹16,00,000</span>
+                <span class="rate">15%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹16,00,000 - ₹20,00,000</span>
+                <span class="rate">20%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹20,00,000 - ₹24,00,000</span>
+                <span class="rate">25%</span>
+            </div>
+            <div class="slab">
+                <span class="range">Above ₹24,00,000</span>
+                <span class="rate">30%</span>
+            </div>
+        `;
+        
+        tipsTitle.innerHTML = '💡 Tax Saving Tips AY 2026-27';
+        tipsList.innerHTML = `
+            <li>Income up to ₹12 lakhs is tax-free under new regime</li>
+            <li>Standard deduction of ₹75,000 for salaried employees</li>
+            <li>Enhanced rebate of ₹60,000 under Section 87A</li>
+            <li>Compare old vs new tax regime for your income level</li>
+            <li>Plan investments before financial year end</li>
+            <li>Keep all tax-related documents organized</li>
+        `;
+    } else {
+        // AY 2025-26 and earlier (previous tax slabs)
+        slabsTitle.innerHTML = '📊 Tax Slabs AY ' + assessmentYear + ' (New Regime)';
+        slabsContainer.innerHTML = `
+            <div class="slab">
+                <span class="range">Up to ₹3,00,000</span>
+                <span class="rate">0%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹3,00,000 - ₹7,00,000</span>
+                <span class="rate">5%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹7,00,000 - ₹10,00,000</span>
+                <span class="rate">10%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹10,00,000 - ₹12,00,000</span>
+                <span class="rate">15%</span>
+            </div>
+            <div class="slab">
+                <span class="range">₹12,00,000 - ₹15,00,000</span>
+                <span class="rate">20%</span>
+            </div>
+            <div class="slab">
+                <span class="range">Above ₹15,00,000</span>
+                <span class="rate">30%</span>
+            </div>
+        `;
+        
+        tipsTitle.innerHTML = '💡 Tax Saving Tips AY ' + assessmentYear;
+        tipsList.innerHTML = `
+            <li>Income up to ₹7 lakhs is tax-free under new regime</li>
+            <li>Standard deduction of ₹75,000 for salaried employees</li>
+            <li>Rebate of ₹25,000 under Section 87A</li>
+            <li>Compare old vs new tax regime for your income level</li>
+            <li>Plan investments before financial year end</li>
+            <li>Keep all tax-related documents organized</li>
+        `;
     }
 }
