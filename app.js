@@ -877,23 +877,43 @@ function calculateITR() {
     let rebate = 0;
     
     if (regime === 'new') {
-        regimeName = 'New Tax Regime (Default for FY 2024-25)';
-        standardDeduction = 75000; // Budget 2024 increased to ₹75,000
+        regimeName = 'New Tax Regime (Current)';
+        standardDeduction = 75000; // Standard deduction as per current rates
         
         const taxableIncome = Math.max(0, income - standardDeduction);
         
-        // New tax regime slabs for FY 2024-25
-        if (taxableIncome <= 300000) tax = 0;
-        else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
-        else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
-        else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
-        else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
-        else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+        // Check assessment year to apply correct tax slabs
+        const assessmentYear = document.getElementById('itr-year-enhanced')?.value;
         
-        // Rebate under Section 87A - 100% rebate for income up to ₹7 lakhs
-        if (taxableIncome <= 700000) {
-            rebate = tax;
-            tax = 0;
+        if (assessmentYear === '2026-27') {
+            // New tax regime slabs for AY 2026-27 (Budget 2025)
+            if (taxableIncome <= 400000) tax = 0;
+            else if (taxableIncome <= 800000) tax = (taxableIncome - 400000) * 0.05;
+            else if (taxableIncome <= 1200000) tax = 20000 + (taxableIncome - 800000) * 0.10;
+            else if (taxableIncome <= 1600000) tax = 60000 + (taxableIncome - 1200000) * 0.15;
+            else if (taxableIncome <= 2000000) tax = 120000 + (taxableIncome - 1600000) * 0.20;
+            else if (taxableIncome <= 2400000) tax = 200000 + (taxableIncome - 2000000) * 0.25;
+            else tax = 300000 + (taxableIncome - 2400000) * 0.30;
+            
+            // Enhanced rebate under Section 87A for AY 2026-27 - up to ₹12 lakhs
+            if (taxableIncome <= 1200000) {
+                rebate = Math.min(tax, 60000);
+                tax = Math.max(0, tax - rebate);
+            }
+        } else {
+            // Previous years tax regime slabs (AY 2025-26 and earlier)
+            if (taxableIncome <= 300000) tax = 0;
+            else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
+            else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
+            else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
+            else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
+            else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+            
+            // Rebate under Section 87A - 100% rebate for income up to ₹7 lakhs
+            if (taxableIncome <= 700000) {
+                rebate = Math.min(tax, 25000);
+                tax = Math.max(0, tax - rebate);
+            }
         }
     } else {
         regimeName = 'Old Tax Regime (FY 2024-25)';
