@@ -218,13 +218,16 @@ h1 {
   font-size: var(--font-size-4xl);
 }
 h2 {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
 }
 h3 {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
 }
 h4 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
 }
 h5 {
   font-size: var(--font-size-lg);
@@ -775,7 +778,9 @@ main {
 }
 
 .page-header h1 {
-    margin-bottom: var(--space-16);
+    margin-bottom: var(--space-20);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
 }
 
 .page-header p {
@@ -787,9 +792,10 @@ main {
 
 .section__title {
     text-align: center;
-    font-size: var(--font-size-3xl);
-    margin-bottom: var(--space-16);
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--space-20);
     color: var(--color-text);
+    font-weight: var(--font-weight-bold);
 }
 
 .section__subtitle {
@@ -805,13 +811,27 @@ main {
 /* Hero Section */
 .hero {
     background: linear-gradient(135deg, var(--color-bg-1) 0%, var(--color-bg-3) 100%);
-    padding: var(--space-32) 0;
+    padding: var(--space-40) 0;
     text-align: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .hero__content {
     max-width: 800px;
     margin: 0 auto;
+    width: 100%;
+}
+
+.hero__logo {
+    position: absolute;
+    top: var(--space-24);
+    left: 50%;
+    transform: translateX(-50%);
+    height: 80px;
+    width: auto;
 }
 
 .hero__title {
@@ -891,9 +911,10 @@ main {
 }
 
 .service-card__title {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     margin-bottom: var(--space-12);
     color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
 }
 
 .service-card__description {
@@ -940,9 +961,10 @@ main {
 }
 
 .feature__title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     margin-bottom: var(--space-12);
     color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
 }
 
 .feature__description {
@@ -2314,7 +2336,7 @@ main {
     }
 
     .section__title {
-        font-size: var(--font-size-2xl);
+        font-size: var(--font-size-3xl);
     }
 
     .btn--lg {
