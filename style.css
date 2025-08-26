@@ -826,10 +826,8 @@ main {
 }
 
 .hero__logo {
-    position: absolute;
-    top: var(--space-24);
-    left: 50%;
-    transform: translateX(-50%);
+    display: block;
+    margin: 0 auto var(--space-8) auto;
     height: 80px;
     width: auto;
 }
