@@ -625,8 +625,8 @@ select.form-control {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-16) var(--space-16);
-    min-height: 70px;
+    padding: var(--space-12) var(--space-16);
+    min-height: 55px;
 }
 
 .nav__brand {
@@ -649,7 +649,7 @@ select.form-control {
 }
 
 .nav__logo-img {
-    height: 60px;
+    height: 45px;
     width: auto;
     vertical-align: middle;
     transition: transform var(--duration-fast) var(--ease-standard);
