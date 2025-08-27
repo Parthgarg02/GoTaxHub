@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - GoTaxHub</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="GoTaxHub Updated Logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="GoTaxHub Updated Logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="GoTaxHub Updated Logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thank-you-container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px 50px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thank-you-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.05), transparent);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .success-icon::before {
+            content: '✓';
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .thank-you-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .thank-you-content h1 {
+            color: #1f2937;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .thank-you-content p {
+            color: #6b7280;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-call:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-home {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .phone-icon {
+            font-size: 1.2rem;
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 15px;
+            border-left: 4px solid #10b981;
+        }
+
+        .contact-info h3 {
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .contact-info p {
+            color: #4b5563;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .contact-info .phone {
+            color: #10b981;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 15s linear infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @media (max-width: 768px) {
+            .thank-you-container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+
+            .thank-you-content h1 {
+                font-size: 2rem;
+            }
+
+            .thank-you-content p {
+                font-size: 1.1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <div class="floating-elements">
+            <div class="floating-element">🎉</div>
+            <div class="floating-element">✨</div>
+            <div class="floating-element">🎊</div>
+        </div>
+
+        <div class="success-icon"></div>
+        
+        <div class="thank-you-content">
+            <h1>Thank You!</h1>
+            <p>Your message has been successfully submitted.</p>
+            <p>Our <span class="highlight">expert CA team</span> will contact you within <span class="highlight">24 hours</span> to discuss your requirements.</p>
+            <p>We appreciate your trust in GoTaxHub for your tax and business needs.</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="tel:+917905208874" class="btn btn-call">
+                <span class="phone-icon">📞</span>
+                Call Now
+            </a>
+            <a href="index.html" class="btn btn-home">
+                <span class="home-icon">🏠</span>
+                Go Home
+            </a>
+        </div>
+
+        <div class="contact-info">
+            <h3>Need Immediate Assistance?</h3>
+            <p>For urgent queries, call us directly at:</p>
+            <p class="phone">+91-7905208874</p>
+            <p>Available: Monday - Saturday, 9:00 AM - 7:00 PM</p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.thank-you-container');
+            
+            // Animate container entrance
+            container.style.opacity = '0';
+            container.style.transform = 'scale(0.9) translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.6s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'scale(1) translateY(0px)';
+            }, 100);
+
+            // Animate success icon
+            const successIcon = document.querySelector('.success-icon');
+            setTimeout(() => {
+                successIcon.style.animation = 'pulse 2s ease-in-out';
+            }, 600);
+
+            // Add pulse animation to buttons on hover
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.animation = 'pulse 0.5s ease-in-out';
+                });
+                
+                btn.addEventListener('animationend', function() {
+                    this.style.animation = '';
+                });
+            });
+        });
+
+        // Add pulse keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
