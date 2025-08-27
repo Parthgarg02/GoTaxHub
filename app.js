@@ -616,23 +616,25 @@ function calculateEnhancedITR() {
     let totalDeductions = 0;
     let regimeName = '';
     
-    // Set standard deduction based on regime
+    // Set standard deduction based on regime and assessment year
     if (taxRegime === 'new') {
         regimeName = 'New Tax Regime (Section 115BAC)';
-        standardDeduction = 75000; // Budget 2024
-        basicExemption = getBasicExemption(ageCategory, 'new');
+        // Standard deduction only applies if there's gross salary
+        standardDeduction = grossSalary > 0 ? 75000 : 0;
+        basicExemption = getBasicExemption(ageCategory, 'new', assessmentYear);
     } else {
         regimeName = 'Old Tax Regime';
-        standardDeduction = 50000;
-        basicExemption = getBasicExemption(ageCategory, 'old');
+        // Standard deduction only applies if there's gross salary
+        standardDeduction = grossSalary > 0 ? 50000 : 0;
+        basicExemption = getBasicExemption(ageCategory, 'old', assessmentYear);
         totalDeductions = Math.min(section80C, 150000) + section80D + section80G;
     }
     
     // Calculate taxable income
     let taxableIncome = Math.max(0, totalIncome - standardDeduction - totalDeductions);
     
-    // Calculate tax based on regime and age
-    let incomeTax = calculateTaxByRegimeAndAge(taxableIncome, taxRegime, ageCategory);
+    // Calculate tax based on regime, age and assessment year
+    let incomeTax = calculateTaxByRegimeAndAge(taxableIncome, taxRegime, ageCategory, assessmentYear);
     
     // Add surcharge if applicable
     let surcharge = calculateSurcharge(taxableIncome, incomeTax, taxpayerCategory);
@@ -644,7 +646,7 @@ function calculateEnhancedITR() {
     let totalTax = incomeTax + surcharge + cess;
     
     // Apply rebate if applicable
-    let rebate = calculateRebate(taxableIncome, taxRegime, incomeTax);
+    let rebate = calculateRebate(taxableIncome, taxRegime, incomeTax, assessmentYear);
     totalTax = Math.max(0, totalTax - rebate);
     
     // Display detailed results
@@ -667,11 +669,15 @@ function calculateEnhancedITR() {
     });
 }
 
-function getBasicExemption(ageCategory, regime) {
+function getBasicExemption(ageCategory, regime, assessmentYear) {
     if (regime === 'new') {
-        return 300000; // New regime basic exemption
+        if (assessmentYear === '2026-27') {
+            return 400000; // New regime basic exemption for AY 2026-27
+        } else {
+            return 300000; // New regime basic exemption for AY 2025-26 and earlier
+        }
     } else {
-        // Old regime exemptions
+        // Old regime exemptions remain same across years
         switch (ageCategory) {
             case 'below-60': return 250000;
             case '60-80': return 300000;
@@ -681,20 +687,31 @@ function getBasicExemption(ageCategory, regime) {
     }
 }
 
-function calculateTaxByRegimeAndAge(taxableIncome, regime, ageCategory) {
+function calculateTaxByRegimeAndAge(taxableIncome, regime, ageCategory, assessmentYear) {
     let tax = 0;
     
     if (regime === 'new') {
-        // New tax regime slabs
-        if (taxableIncome <= 300000) tax = 0;
-        else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
-        else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
-        else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
-        else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
-        else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+        if (assessmentYear === '2026-27') {
+            // New tax regime slabs for AY 2026-27
+            if (taxableIncome <= 400000) tax = 0;
+            else if (taxableIncome <= 800000) tax = (taxableIncome - 400000) * 0.05;
+            else if (taxableIncome <= 1200000) tax = 20000 + (taxableIncome - 800000) * 0.10;
+            else if (taxableIncome <= 1600000) tax = 60000 + (taxableIncome - 1200000) * 0.15;
+            else if (taxableIncome <= 2000000) tax = 120000 + (taxableIncome - 1600000) * 0.20;
+            else if (taxableIncome <= 2400000) tax = 200000 + (taxableIncome - 2000000) * 0.25;
+            else tax = 300000 + (taxableIncome - 2400000) * 0.30;
+        } else {
+            // New tax regime slabs for AY 2025-26 and earlier
+            if (taxableIncome <= 300000) tax = 0;
+            else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
+            else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
+            else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
+            else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
+            else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+        }
     } else {
-        // Old regime slabs based on age
-        let exemption = getBasicExemption(ageCategory, 'old');
+        // Old regime slabs based on age (same across years)
+        let exemption = getBasicExemption(ageCategory, 'old', assessmentYear);
         
         if (taxableIncome <= exemption) tax = 0;
         else if (taxableIncome <= 500000) tax = (taxableIncome - exemption) * 0.05;
@@ -726,16 +743,22 @@ function calculateSurcharge(taxableIncome, incomeTax, taxpayerCategory) {
     return surcharge;
 }
 
-function calculateRebate(taxableIncome, regime, incomeTax) {
+function calculateRebate(taxableIncome, regime, incomeTax, assessmentYear) {
     let rebate = 0;
     
     if (regime === 'new') {
-        if (taxableIncome <= 700000) {
-            rebate = Math.min(incomeTax, 25000); // Section 87A rebate
+        if (assessmentYear === '2026-27') {
+            if (taxableIncome <= 1200000) {
+                rebate = Math.min(incomeTax, 60000); // Enhanced Section 87A rebate for AY 2026-27
+            }
+        } else {
+            if (taxableIncome <= 700000) {
+                rebate = Math.min(incomeTax, 25000); // Section 87A rebate for AY 2025-26
+            }
         }
     } else {
         if (taxableIncome <= 500000) {
-            rebate = Math.min(incomeTax, 12500); // Section 87A rebate
+            rebate = Math.min(incomeTax, 12500); // Section 87A rebate (same across years)
         }
     }
     
