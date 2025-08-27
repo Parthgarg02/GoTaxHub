@@ -98,7 +98,7 @@
                 <div class="contact-content">
                     <div class="contact-form-section">
                         <h2>Send us a Message</h2>
-                        <form class="contact-form" id="contact-form" method="POST" action="https://formsubmit.co/info@gotaxhub.com">
+                        <form class="contact-form" id="contact-form" method="POST" action="https://formspree.io/f/mjkevnbg">
                             <div class="form-group">
                                 <label for="name" class="form-label">Full Name *</label>
                                 <input type="text" id="name" name="name" class="form-control" required>
@@ -130,12 +130,13 @@
                                 <textarea id="message" name="message" class="form-control" rows="5" placeholder="Tell us about your requirements..."></textarea>
                             </div>
                             
-                            <!-- FormSubmit Configuration Fields -->
-                            <input type="hidden" name="_subject" value="New Contact Form Submission - GoTaxHub">
-                            <input type="hidden" name="_next" value="contact.html?success=true">
-                            <input type="hidden" name="_template" value="table">
+                            <!-- Form Status Messages -->
+                            <div id="form-status" class="form-status"></div>
                             
-                            <button type="submit" class="btn btn--primary btn--full-width">Send Message</button>
+                            <button type="submit" class="btn btn--primary btn--full-width" id="submit-btn">
+                                <span class="btn-text">Send Message</span>
+                                <span class="btn-loading" style="display: none;">Sending...</span>
+                            </button>
                         </form>
                     </div>
 

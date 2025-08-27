@@ -227,17 +227,17 @@ function initFAQ() {
     });
 }
 
-// Contact form functionality
+// Contact form functionality with Formspree integration
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             console.log('Contact form submitted'); // Debug log
             
-            // Get form data
+            // Get form elements
             const formData = new FormData(this);
             const name = formData.get('name');
             const email = formData.get('email');
@@ -245,52 +245,89 @@ function initContactForm() {
             const service = formData.get('service');
             const message = formData.get('message');
             
+            // Form status element
+            const formStatus = document.getElementById('form-status');
+            const submitButton = document.getElementById('submit-btn');
+            const btnText = submitButton.querySelector('.btn-text');
+            const btnLoading = submitButton.querySelector('.btn-loading');
+            
+            // Clear previous status
+            formStatus.innerHTML = '';
+            formStatus.className = 'form-status';
+            
             // Basic validation
             if (!name || !email || !phone) {
-                showNotification('Please fill in all required fields.', 'error');
+                showFormMessage('Please fill in all required fields.', 'error');
                 return;
             }
             
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                showNotification('Please enter a valid email address.', 'error');
+                showFormMessage('Please enter a valid email address.', 'error');
                 return;
             }
             
             // Phone validation (basic)
             const phoneRegex = /^[0-9+\-\s\(\)]+$/;
             if (!phoneRegex.test(phone)) {
-                showNotification('Please enter a valid phone number.', 'error');
+                showFormMessage('Please enter a valid phone number.', 'error');
                 return;
             }
             
-            // Simulate form submission
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            
-            submitButton.textContent = 'Sending...';
+            // Show loading state
             submitButton.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
             
-            // Submit form using fetch API for proper server-side processing
-            fetch('/', {
-                method: 'POST',
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(new FormData(this)).toString()
-            })
-            .then(() => {
-                showNotification('Thank you for your message! Our team will contact you within 24 hours.', 'success');
-                this.reset();
-            })
-            .catch((error) => {
+            try {
+                // Submit to Formspree
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    showFormMessage('Thank you for your message! Our team will contact you within 24 hours.', 'success');
+                    contactForm.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
                 console.error('Form submission error:', error);
-                showNotification('Sorry, there was an error sending your message. Please try again or contact us directly at info@gotaxhub.com.', 'error');
-            })
-            .finally(() => {
-                submitButton.textContent = originalText;
+                showFormMessage('Sorry, there was an error sending your message. Please try again or contact us directly at info@gotaxhub.com.', 'error');
+            } finally {
+                // Reset button state
                 submitButton.disabled = false;
-            });
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
         });
+    }
+}
+
+// Helper function to show form messages
+function showFormMessage(message, type) {
+    const formStatus = document.getElementById('form-status');
+    if (formStatus) {
+        formStatus.innerHTML = `<div class="form-message form-message--${type}">${message}</div>`;
+        formStatus.className = `form-status form-status--${type}`;
+        
+        // Auto-hide success messages after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                formStatus.innerHTML = '';
+                formStatus.className = 'form-status';
+            }, 5000);
+        }
+    }
+    
+    // Also use the existing notification system if available
+    if (typeof showNotification === 'function') {
+        showNotification(message, type);
     }
 }
 

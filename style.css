@@ -2464,6 +2464,47 @@ main {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Form status and message styles */
+.form-status {
+    margin: var(--space-16) 0;
+}
+
+.form-message {
+    padding: var(--space-12) var(--space-16);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border: 1px solid;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-message--success {
+    background-color: #f0fdf4;
+    border-color: #16a34a;
+    color: #15803d;
+}
+
+.form-message--error {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    color: #dc2626;
+}
+
+.btn-loading {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .income-section,
 .deduction-section {
     background: var(--color-bg-1);
