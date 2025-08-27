@@ -660,18 +660,24 @@ function calculateEnhancedITR() {
     // Calculate total taxable income for surcharge calculation
     const totalTaxableIncome = regularTaxableIncome + stcg112a + ltcg112a + otherCapitalGains;
     
-    // Add surcharge if applicable (based on total income)
-    let surcharge = calculateSurcharge(totalTaxableIncome, incomeTax, taxpayerCategory);
+    // Apply rebate first (based on total taxable income)
+    let rebate = calculateRebate(totalTaxableIncome, taxRegime, incomeTax, assessmentYear);
+    let taxAfterRebate = Math.max(0, incomeTax - rebate);
     
-    // Add Health and Education Cess (4%)
-    let cess = (incomeTax + surcharge) * 0.04;
+    // Add surcharge if applicable (only if tax remains after rebate)
+    let surcharge = 0;
+    if (taxAfterRebate > 0) {
+        surcharge = calculateSurcharge(totalTaxableIncome, incomeTax, taxpayerCategory);
+    }
+    
+    // Add Health and Education Cess (4%) - only if tax remains after rebate
+    let cess = 0;
+    if (taxAfterRebate > 0) {
+        cess = (incomeTax + surcharge) * 0.04;
+    }
     
     // Total tax liability
-    let totalTax = incomeTax + surcharge + cess;
-    
-    // Apply rebate if applicable (based on total taxable income)
-    let rebate = calculateRebate(totalTaxableIncome, taxRegime, incomeTax, assessmentYear);
-    totalTax = Math.max(0, totalTax - rebate);
+    let totalTax = Math.max(0, (incomeTax + surcharge + cess) - rebate);
     
     // Display detailed results
     displayEnhancedResults(resultDiv, {
