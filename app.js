@@ -593,7 +593,9 @@ function calculateEnhancedITR() {
     const grossSalary = parseFloat(document.getElementById('gross-salary').value) || 0;
     const houseProperty = parseFloat(document.getElementById('house-property').value) || 0;
     const businessIncome = parseFloat(document.getElementById('business-income').value) || 0;
-    const capitalGains = parseFloat(document.getElementById('capital-gains').value) || 0;
+    const stcg112a = parseFloat(document.getElementById('stcg-112a').value) || 0;
+    const ltcg112a = parseFloat(document.getElementById('ltcg-112a').value) || 0;
+    const otherCapitalGains = parseFloat(document.getElementById('other-capital-gains').value) || 0;
     const otherSources = parseFloat(document.getElementById('other-sources').value) || 0;
     
     // Deductions (only for old regime)
@@ -604,7 +606,7 @@ function calculateEnhancedITR() {
     const resultDiv = document.getElementById('enhanced-itr-result');
     
     // Calculate total income
-    const totalIncome = grossSalary + houseProperty + businessIncome + capitalGains + otherSources;
+    const totalIncome = grossSalary + houseProperty + businessIncome + stcg112a + ltcg112a + otherCapitalGains + otherSources;
     
     if (totalIncome <= 0) {
         resultDiv.innerHTML = '<p class="error">Please enter valid income details.</p>';
@@ -630,14 +632,36 @@ function calculateEnhancedITR() {
         totalDeductions = Math.min(section80C, 150000) + section80D + section80G;
     }
     
-    // Calculate taxable income
-    let taxableIncome = Math.max(0, totalIncome - standardDeduction - totalDeductions);
+    // Calculate taxable income for regular income (excluding capital gains)
+    const regularIncome = grossSalary + houseProperty + businessIncome + otherSources;
+    let regularTaxableIncome = Math.max(0, regularIncome - standardDeduction - totalDeductions);
     
-    // Calculate tax based on regime, age and assessment year
-    let incomeTax = calculateTaxByRegimeAndAge(taxableIncome, taxRegime, ageCategory, assessmentYear);
+    // Calculate tax on regular income
+    let regularIncomeTax = calculateTaxByRegimeAndAge(regularTaxableIncome, taxRegime, ageCategory, assessmentYear);
     
-    // Add surcharge if applicable
-    let surcharge = calculateSurcharge(taxableIncome, incomeTax, taxpayerCategory);
+    // Calculate tax on STCG 112A (Special rate)
+    let stcgTax = calculateSTCG112ATax(stcg112a, assessmentYear);
+    
+    // Calculate tax on LTCG 112A (Special rate with exemption)
+    let ltcgTax = calculateLTCG112ATax(ltcg112a, assessmentYear);
+    
+    // Calculate tax on other capital gains (as per slab rates)
+    let otherCapitalGainsTax = 0;
+    if (otherCapitalGains > 0) {
+        // Other capital gains are taxed as per regular slab rates
+        const totalIncomeWithOtherCG = regularTaxableIncome + otherCapitalGains;
+        const totalTaxWithOtherCG = calculateTaxByRegimeAndAge(totalIncomeWithOtherCG, taxRegime, ageCategory, assessmentYear);
+        otherCapitalGainsTax = totalTaxWithOtherCG - regularIncomeTax;
+    }
+    
+    // Total income tax
+    let incomeTax = regularIncomeTax + stcgTax + ltcgTax + otherCapitalGainsTax;
+    
+    // Calculate total taxable income for surcharge calculation
+    const totalTaxableIncome = regularTaxableIncome + stcg112a + ltcg112a + otherCapitalGains;
+    
+    // Add surcharge if applicable (based on total income)
+    let surcharge = calculateSurcharge(totalTaxableIncome, incomeTax, taxpayerCategory);
     
     // Add Health and Education Cess (4%)
     let cess = (incomeTax + surcharge) * 0.04;
@@ -645,8 +669,8 @@ function calculateEnhancedITR() {
     // Total tax liability
     let totalTax = incomeTax + surcharge + cess;
     
-    // Apply rebate if applicable
-    let rebate = calculateRebate(taxableIncome, taxRegime, incomeTax, assessmentYear);
+    // Apply rebate if applicable (based on total taxable income)
+    let rebate = calculateRebate(totalTaxableIncome, taxRegime, incomeTax, assessmentYear);
     totalTax = Math.max(0, totalTax - rebate);
     
     // Display detailed results
@@ -659,9 +683,17 @@ function calculateEnhancedITR() {
         totalIncome,
         standardDeduction,
         totalDeductions,
-        taxableIncome,
+        taxableIncome: totalTaxableIncome,
+        regularTaxableIncome,
         basicExemption,
         incomeTax,
+        regularIncomeTax,
+        stcgTax,
+        ltcgTax,
+        otherCapitalGainsTax,
+        stcg112a,
+        ltcg112a,
+        otherCapitalGains,
         surcharge,
         cess,
         rebate,
@@ -765,6 +797,41 @@ function calculateRebate(taxableIncome, regime, incomeTax, assessmentYear) {
     return rebate;
 }
 
+// Calculate STCG 112A tax (Special rate for listed equity/mutual funds)
+function calculateSTCG112ATax(stcgAmount, assessmentYear) {
+    if (stcgAmount <= 0) return 0;
+    
+    // STCG 112A rates based on assessment year
+    let stcgRate = 0.20; // 20% from July 23, 2024 onwards
+    
+    // For periods before July 23, 2024 (applicable for partial AY 2024-25)
+    if (assessmentYear === '2024-25') {
+        stcgRate = 0.15; // 15% before July 23, 2024 (simplified for calculator)
+    }
+    
+    return stcgAmount * stcgRate;
+}
+
+// Calculate LTCG 112A tax (Special rate for listed equity/mutual funds with exemption)
+function calculateLTCG112ATax(ltcgAmount, assessmentYear) {
+    if (ltcgAmount <= 0) return 0;
+    
+    // LTCG exemption limits based on assessment year
+    let exemptionLimit = 125000; // ₹1.25 lakh from July 23, 2024 onwards
+    let ltcgRate = 0.125; // 12.5% from July 23, 2024 onwards
+    
+    // For periods before July 23, 2024
+    if (assessmentYear === '2023-24' || 
+        (assessmentYear === '2024-25' && ltcgAmount <= 100000)) {
+        exemptionLimit = 100000; // ₹1 lakh before July 23, 2024
+        ltcgRate = 0.10; // 10% before July 23, 2024
+    }
+    
+    // Apply exemption
+    const taxableLTCG = Math.max(0, ltcgAmount - exemptionLimit);
+    return taxableLTCG * ltcgRate;
+}
+
 function displayEnhancedResults(resultDiv, data) {
     resultDiv.className = 'enhanced-tool-result has-result';
     
@@ -790,9 +857,33 @@ function displayEnhancedResults(resultDiv, data) {
             </div>
         </div>
         
+        ${(data.stcg112a > 0 || data.ltcg112a > 0 || data.otherCapitalGains > 0) ? `
+        <div class="tax-breakdown">
+            <h5 style="margin-bottom: 10px;">📊 Capital Gains Tax Breakdown</h5>
+            ${data.stcg112a > 0 ? `
+            <div class="tax-item">
+                <h6>STCG 112A (₹${data.stcg112a.toLocaleString()})</h6>
+                <div class="amount">₹${Math.round(data.stcgTax).toLocaleString()}</div>
+            </div>` : ''}
+            ${data.ltcg112a > 0 ? `
+            <div class="tax-item">
+                <h6>LTCG 112A (₹${data.ltcg112a.toLocaleString()})</h6>
+                <div class="amount">₹${Math.round(data.ltcgTax).toLocaleString()}</div>
+            </div>` : ''}
+            ${data.otherCapitalGains > 0 ? `
+            <div class="tax-item">
+                <h6>Other Capital Gains (₹${data.otherCapitalGains.toLocaleString()})</h6>
+                <div class="amount">₹${Math.round(data.otherCapitalGainsTax).toLocaleString()}</div>
+            </div>` : ''}
+        </div>` : ''}
+        
         <div class="tax-breakdown">
             <div class="tax-item">
-                <h5>Income Tax</h5>
+                <h5>Regular Income Tax</h5>
+                <div class="amount">₹${Math.round(data.regularIncomeTax).toLocaleString()}</div>
+            </div>
+            <div class="tax-item">
+                <h5>Total Income Tax</h5>
                 <div class="amount">₹${Math.round(data.incomeTax).toLocaleString()}</div>
             </div>
             <div class="tax-item">
@@ -846,7 +937,7 @@ function getTaxPlanningTip(regime, deductions, income) {
 
 function resetEnhancedCalculator() {
     // Reset all form fields
-    const formElements = document.querySelectorAll('#taxpayer-category, #age-category, #residential-status, #itr-year-enhanced, #tax-regime-enhanced, #gross-salary, #house-property, #business-income, #capital-gains, #other-sources, #section-80c, #section-80d, #section-80g');
+    const formElements = document.querySelectorAll('#taxpayer-category, #age-category, #residential-status, #itr-year-enhanced, #tax-regime-enhanced, #gross-salary, #house-property, #business-income, #stcg-112a, #ltcg-112a, #other-capital-gains, #other-sources, #section-80c, #section-80d, #section-80g');
     
     formElements.forEach(element => {
         if (element.tagName === 'SELECT') {
