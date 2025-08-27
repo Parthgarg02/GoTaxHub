@@ -810,7 +810,7 @@ main {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--color-bg-1) 0%, var(--color-bg-3) 100%);
     padding: var(--space-40) 0;
     text-align: center;
     min-height: 100vh;
