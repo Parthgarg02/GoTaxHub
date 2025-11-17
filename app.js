@@ -298,7 +298,7 @@ function initContactForm() {
                 }
             } catch (error) {
                 console.error('Form submission error:', error);
-                showFormMessage('Sorry, there was an error sending your message. Please try again or contact us directly at info@gotaxhub.com.', 'error');
+                showFormMessage('Sorry, there was an error sending your message. Please try again or contact us directly at office@gotaxhub.com.', 'error');
             } finally {
                 // Reset button state
                 submitButton.disabled = false;
