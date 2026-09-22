@@ -1797,8 +1797,8 @@ function updateTaxSlabsDisplay(assessmentYear) {
     if (!slabsTitle || !slabsContainer || !tipsTitle || !tipsList) return;
     
     if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
-        // AY 2026-27 slabs (Budget 2025)
-        slabsTitle.innerHTML = '📊 Tax Slabs AY 2026-27 (New Regime)';
+        // AY 2026-27 and AY 2027-28 share the same slabs (Budget 2025 structure carried over)
+        slabsTitle.innerHTML = '📊 Tax Slabs AY ' + assessmentYear + ' (New Regime)';
         slabsContainer.innerHTML = `
             <div class="slab">
                 <span class="range">Up to ₹4,00,000</span>
@@ -1830,7 +1830,7 @@ function updateTaxSlabsDisplay(assessmentYear) {
             </div>
         `;
         
-        tipsTitle.innerHTML = '💡 Tax Saving Tips AY 2026-27';
+        tipsTitle.innerHTML = '💡 Tax Saving Tips AY ' + assessmentYear;
         tipsList.innerHTML = `
             <li>Income up to ₹12 lakhs is tax-free under new regime</li>
             <li>Standard deduction of ₹75,000 for salaried employees</li>
