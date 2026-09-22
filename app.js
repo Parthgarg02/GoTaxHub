@@ -746,7 +746,7 @@ function calculateEnhancedITR() {
 
 function getBasicExemption(ageCategory, regime, assessmentYear) {
     if (regime === 'new') {
-        if (assessmentYear === '2026-27') {
+        if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
             return 400000; // New regime basic exemption for AY 2026-27
         } else {
             return 300000; // New regime basic exemption for AY 2025-26 and earlier
@@ -766,7 +766,7 @@ function calculateTaxByRegimeAndAge(taxableIncome, regime, ageCategory, assessme
     let tax = 0;
     
     if (regime === 'new') {
-        if (assessmentYear === '2026-27') {
+        if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
             // New tax regime slabs for AY 2026-27
             if (taxableIncome <= 400000) tax = 0;
             else if (taxableIncome <= 800000) tax = (taxableIncome - 400000) * 0.05;
@@ -822,7 +822,7 @@ function calculateRebate(taxableIncome, regime, incomeTax, assessmentYear) {
     let rebate = 0;
     
     if (regime === 'new') {
-        if (assessmentYear === '2026-27') {
+        if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
             if (taxableIncome <= 1200000) {
                 rebate = Math.min(incomeTax, 60000); // Enhanced Section 87A rebate for AY 2026-27
             }
@@ -1043,7 +1043,7 @@ function calculateITR() {
         // Check assessment year to apply correct tax slabs
         const assessmentYear = document.getElementById('itr-year-enhanced')?.value;
         
-        if (assessmentYear === '2026-27') {
+        if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
             // New tax regime slabs for AY 2026-27 (Budget 2025)
             if (taxableIncome <= 400000) tax = 0;
             else if (taxableIncome <= 800000) tax = (taxableIncome - 400000) * 0.05;
@@ -1074,12 +1074,12 @@ function calculateITR() {
             }
         }
     } else {
-        regimeName = 'Old Tax Regime (FY 2024-25)';
+        regimeName = 'Old Tax Regime';
         standardDeduction = 50000; // Old regime standard deduction
         
         const taxableIncome = Math.max(0, income - standardDeduction);
         
-        // Old tax regime slabs for FY 2024-25
+        // Old tax regime slabs (unchanged across years)
         if (taxableIncome <= 250000) tax = 0;
         else if (taxableIncome <= 500000) tax = (taxableIncome - 250000) * 0.05;
         else if (taxableIncome <= 1000000) tax = 12500 + (taxableIncome - 500000) * 0.20;
@@ -1224,7 +1224,7 @@ function calculateGratuity() {
     const taxableAmount = Math.max(0, gratuity - actualExemption);
     
     resultDiv.innerHTML = `
-        <h4>Gratuity Calculation Result (FY 2024-25)</h4>
+        <h4>Gratuity Calculation Result (FY 2026-27)</h4>
         <p><strong>Employee Type:</strong> ${employeeType === 'government' ? 'Government Employee' : 'Private Sector Employee'}</p>
         <p><strong>Basic Salary (Last Drawn):</strong> ₹${salary.toLocaleString()}</p>
         <p><strong>Years of Service:</strong> ${years} ${employeeType === 'private' ? `(Rounded to ${Math.round(years)})` : ''}</p>
@@ -1267,14 +1267,14 @@ function calculateTDS() {
             tds = taxLiability;
             threshold = 0; // No threshold for salary TDS
             rate = 'As per tax slabs';
-            section = 'Section 192';
+            section = 'Section 392 (formerly 192)';
             applicableIncome = annualIncome;
             break;
             
         case 'interest':
-            threshold = 40000; // ₹50,000 for senior citizens (60+)
+            threshold = 50000; // ₹1,00,000 for senior citizens (60+); ₹10,000 for non-bank payers
             rate = 10;
-            section = 'Section 194A';
+            section = 'Section 393 (formerly 194A)';
             if (annualIncome > threshold) {
                 applicableIncome = annualIncome;
                 tds = annualIncome * 0.10;
@@ -1282,9 +1282,9 @@ function calculateTDS() {
             break;
             
         case 'professional':
-            threshold = 30000; // Annual threshold
+            threshold = 50000; // Annual threshold (revised by Finance Act 2025)
             rate = 10;
-            section = 'Section 194J';
+            section = 'Section 393 (formerly 194J)';
             if (annualIncome > threshold) {
                 applicableIncome = annualIncome;
                 tds = annualIncome * 0.10;
@@ -1292,9 +1292,9 @@ function calculateTDS() {
             break;
             
         case 'rent':
-            threshold = 240000; // Annual threshold for individuals/HUFs
+            threshold = 600000; // ₹50,000 per month for individuals/HUFs not liable to audit
             rate = 2; // Reduced from 5% to 2% effective October 1, 2024
-            section = 'Section 194IB';
+            section = 'Section 393 (formerly 194-IB)';
             if (annualIncome > threshold) {
                 applicableIncome = annualIncome;
                 tds = annualIncome * 0.02;
@@ -1302,9 +1302,9 @@ function calculateTDS() {
             break;
             
         case 'commission':
-            threshold = 15000; // Annual threshold
+            threshold = 20000; // Annual threshold (revised by Finance Act 2025)
             rate = 2; // Reduced from 5% to 2% effective October 1, 2024
-            section = 'Section 194H';
+            section = 'Section 393 (formerly 194H)';
             if (annualIncome > threshold) {
                 applicableIncome = annualIncome;
                 tds = annualIncome * 0.02;
@@ -1312,9 +1312,9 @@ function calculateTDS() {
             break;
             
         case 'contractor':
-            threshold = 30000; // For individuals, ₹1 lakh for companies
-            rate = 1; // 1% for individuals, 2% for companies
-            section = 'Section 194C';
+            threshold = 100000; // ₹30,000 single payment / ₹1,00,000 aggregate in a FY
+            rate = 1; // 1% for individuals/HUF, 2% for others
+            section = 'Section 393 (formerly 194C)';
             if (annualIncome > threshold) {
                 applicableIncome = annualIncome;
                 tds = annualIncome * 0.01;
@@ -1322,9 +1322,9 @@ function calculateTDS() {
             break;
             
         case 'dividend':
-            threshold = 5000; // Annual threshold
+            threshold = 10000; // Annual threshold (revised by Finance Act 2025)
             rate = 10;
-            section = 'Section 194';
+            section = 'Section 393 (formerly 194)';
             if (annualIncome > threshold) {
                 applicableIncome = annualIncome;
                 tds = annualIncome * 0.10;
@@ -1335,7 +1335,7 @@ function calculateTDS() {
     const monthlyTDS = tds / 12;
     
     resultDiv.innerHTML = `
-        <h4>TDS Calculation Result (FY 2024-25)</h4>
+        <h4>TDS Calculation Result (FY 2026-27 / AY 2027-28)</h4>
         <p><strong>Income Type:</strong> ${type.charAt(0).toUpperCase() + type.slice(1)}</p>
         <p><strong>Applicable Section:</strong> ${section}</p>
         <p><strong>${isMonthly ? 'Monthly' : 'Annual'} Income:</strong> ₹${income.toLocaleString()}</p>
@@ -1356,7 +1356,7 @@ function calculateTDS() {
             <h5>Important Notes:</h5>
             <ul>
                 <li>Higher rates apply if PAN is not provided (Section 206AA)</li>
-                <li>TDS rates updated as per Finance Act 2024</li>
+                <li>Thresholds reflect the Income-tax Act, 2025 (in force from 1 April 2026). TDS provisions are consolidated into Section 393; salary TDS sits in Section 392.</li>
                 <li>Senior citizens (60+) have higher threshold for interest income</li>
                 ${type === 'rent' || type === 'commission' ? '<li>Rate reduced effective October 1, 2024</li>' : ''}
             </ul>
@@ -1428,7 +1428,7 @@ function calculateLeaveEncashment() {
     const taxableAmount = Math.max(0, totalEncashment - exemptAmount);
     
     resultDiv.innerHTML = `
-        <h4>Leave Encashment Tax Calculation (FY 2024-25)</h4>
+        <h4>Leave Encashment Tax Calculation (FY 2026-27)</h4>
         <p><strong>Employee Type:</strong> ${employeeType === 'government' ? 'Government Employee' : 'Non-Government Employee'}</p>
         <p><strong>Basic Salary + DA:</strong> ₹${salary.toLocaleString()}</p>
         <p><strong>Years of Service:</strong> ${years}</p>
@@ -1796,7 +1796,7 @@ function updateTaxSlabsDisplay(assessmentYear) {
     
     if (!slabsTitle || !slabsContainer || !tipsTitle || !tipsList) return;
     
-    if (assessmentYear === '2026-27') {
+    if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
         // AY 2026-27 slabs (Budget 2025)
         slabsTitle.innerHTML = '📊 Tax Slabs AY 2026-27 (New Regime)';
         slabsContainer.innerHTML = `
