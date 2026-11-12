@@ -1208,7 +1208,7 @@ function calculateGratuity() {
     if (employeeType === 'government') {
         // Government employees - different calculation
         gratuity = (salary * years) / 2; // 1/2 month's salary for each year
-        exemptLimit = 2500000; // ₹25 lakhs for government employees (effective Jan 1, 2024)
+        exemptLimit = Infinity; // government employees: gratuity is fully exempt
         calculationMethod = 'Government Formula: (Basic Salary × Years of Service) ÷ 2';
     } else {
         // Private sector employees
@@ -1218,9 +1218,12 @@ function calculateGratuity() {
         calculationMethod = 'Private Formula: (Basic Salary × 15 × Years) ÷ 26';
     }
     
-    // Calculate exemption (minimum of actual gratuity, exemption limit, and 10 months average salary × years × 1/2)
-    const tenMonthsFormula = (salary * 10 * years) / 2;
-    const actualExemption = Math.min(gratuity, exemptLimit, tenMonthsFormula);
+    // Government gratuity is wholly exempt. For others the exemption is the least of:
+    // actual gratuity, the statutory cap, and 15 days' salary for each completed year.
+    const tenMonthsFormula = (salary * 15 * Math.round(years)) / 26;
+    const actualExemption = (employeeType === 'government')
+        ? gratuity
+        : Math.min(gratuity, exemptLimit, tenMonthsFormula);
     const taxableAmount = Math.max(0, gratuity - actualExemption);
     
     resultDiv.innerHTML = `
@@ -1233,8 +1236,10 @@ function calculateGratuity() {
         <div class="exemption-details">
             <h5>Tax Exemption Calculation:</h5>
             <p>• Actual Gratuity: ₹${Math.round(gratuity).toLocaleString()}</p>
-            <p>• Maximum Exemption Limit: ₹${exemptLimit.toLocaleString()}</p>
-            <p>• 10 Months Salary Formula: ₹${Math.round(tenMonthsFormula).toLocaleString()}</p>
+            ${employeeType === 'government'
+                ? '<p>• Statutory Cap: fully exempt &mdash; no monetary limit</p>'
+                : `<p>• Maximum Exemption Limit: ₹${exemptLimit.toLocaleString()}</p>
+            <p>• 15 Days' Salary Per Completed Year: ₹${Math.round(tenMonthsFormula).toLocaleString()}</p>`}
             <p><strong>Exempt Amount (Minimum of above):</strong> ₹${Math.round(actualExemption).toLocaleString()}</p>
             <p class="highlight"><strong>Taxable Amount:</strong> ₹${Math.round(taxableAmount).toLocaleString()}</p>
         </div>
@@ -1798,7 +1803,9 @@ function updateTaxSlabsDisplay(assessmentYear) {
     
     if ((assessmentYear === '2026-27' || assessmentYear === '2027-28')) {
         // AY 2026-27 and AY 2027-28 share the same slabs (Budget 2025 structure carried over)
-        slabsTitle.innerHTML = '📊 Tax Slabs AY ' + assessmentYear + ' (New Regime)';
+        slabsTitle.innerHTML = (assessmentYear === '2027-28')
+            ? '\ud83d\udcca Tax Slabs \u2014 Tax Year 2026-27 (New Regime)'
+            : '\ud83d\udcca Tax Slabs AY ' + assessmentYear + ' (New Regime)';
         slabsContainer.innerHTML = `
             <div class="slab">
                 <span class="range">Up to ₹4,00,000</span>
@@ -1830,7 +1837,9 @@ function updateTaxSlabsDisplay(assessmentYear) {
             </div>
         `;
         
-        tipsTitle.innerHTML = '💡 Tax Saving Tips AY ' + assessmentYear;
+        tipsTitle.innerHTML = (assessmentYear === '2027-28')
+            ? '\ud83d\udca1 Tax Saving Tips \u2014 Tax Year 2026-27'
+            : '\ud83d\udca1 Tax Saving Tips AY ' + assessmentYear;
         tipsList.innerHTML = `
             <li>Income up to ₹12 lakhs is tax-free under new regime</li>
             <li>Standard deduction of ₹75,000 for salaried employees</li>
@@ -1841,7 +1850,9 @@ function updateTaxSlabsDisplay(assessmentYear) {
         `;
     } else {
         // AY 2025-26 and earlier (previous tax slabs)
-        slabsTitle.innerHTML = '📊 Tax Slabs AY ' + assessmentYear + ' (New Regime)';
+        slabsTitle.innerHTML = (assessmentYear === '2027-28')
+            ? '\ud83d\udcca Tax Slabs \u2014 Tax Year 2026-27 (New Regime)'
+            : '\ud83d\udcca Tax Slabs AY ' + assessmentYear + ' (New Regime)';
         slabsContainer.innerHTML = `
             <div class="slab">
                 <span class="range">Up to ₹3,00,000</span>
@@ -1869,7 +1880,9 @@ function updateTaxSlabsDisplay(assessmentYear) {
             </div>
         `;
         
-        tipsTitle.innerHTML = '💡 Tax Saving Tips AY ' + assessmentYear;
+        tipsTitle.innerHTML = (assessmentYear === '2027-28')
+            ? '\ud83d\udca1 Tax Saving Tips \u2014 Tax Year 2026-27'
+            : '\ud83d\udca1 Tax Saving Tips AY ' + assessmentYear;
         tipsList.innerHTML = `
             <li>Income up to ₹7 lakhs is tax-free under new regime</li>
             <li>Standard deduction of ₹75,000 for salaried employees</li>
